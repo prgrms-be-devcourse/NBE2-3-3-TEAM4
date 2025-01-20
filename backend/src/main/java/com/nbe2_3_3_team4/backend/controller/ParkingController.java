@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,6 +32,29 @@ public class ParkingController {
 		@Parameter(description = "경도") @RequestParam(value = "lng") Double lng) {
 		return ResponseEntity.ok()
 			.body(ApiResponse.createSuccess(parkingService.getNearbyParking(lat, lng)));
-
 	}
+
+	@Operation(summary = "주차장 조회 API", description = "주차장을 조회합니다.")
+	@ApiResponses({
+		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공")})
+	@GetMapping("/{parkingId}")
+	public ResponseEntity<ApiResponse<ParkingResponse.GetParking>> getNearbyParking(
+		@PathVariable Long parkingId
+	) {
+		return ResponseEntity.ok()
+			.body(ApiResponse.createSuccess(parkingService.getParking(parkingId)));
+	}
+
+	@Operation(summary = "주차장 잔여 자리 조회 API", description = "주차장의 잔여 자리를 조회합니다.")
+	@ApiResponses({
+		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공")})
+	@GetMapping("/{parkingId}/status")
+	public ResponseEntity<ApiResponse<ParkingResponse.GetParkingStatus>> getParkingStatus(
+		@PathVariable Long parkingId
+	) {
+		return ResponseEntity.ok()
+			.body(ApiResponse.createSuccess(parkingService.getParkingStatus(parkingId)));
+	}
+
+
 }

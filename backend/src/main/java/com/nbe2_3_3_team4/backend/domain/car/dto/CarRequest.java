@@ -8,4 +8,10 @@ public record CarRequest() {
 	) {
 
 	}
+
+	public record modify(
+		String carNumber
+	) {
+
+	}
 }

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,9 +27,11 @@ public class CarService {
 	public CarResponse.RegCar registerCar(CarRequest.RegCar dto, String email) {
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+
 		if (carRepository.existsByNumber(dto.carNumber())) {
 			throw new DuplicateException(ErrorCode.CAR_ALREADY_EXISTS);
 		}
+
 		return CarResponse.RegCar.from(member.addCar(Car.to(dto)));
 	}
 
@@ -43,10 +46,35 @@ public class CarService {
 	}
 
 	@Transactional(readOnly = true)
-	public CarResponse.GetCars getCars(String email) {
+	public List<CarResponse.GetCar> getCars(String email) {
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
-		return CarResponse.GetCars.from(member.getCars());
+		List<CarResponse.GetCar> cars = new ArrayList<>();
+
+		for(Car car : member.getCars()) {
+			cars.add(CarResponse.GetCar.from(car));
+		}
+
+		return cars;
+	}
+
+	@Transactional
+	public Void modify(Long carId, CarRequest.modify dto) {
+		Car car = carRepository.findById(carId)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.CAR_NOT_FOUND));
+
+		car.modify(dto);
+
+		return null;
+	}
+
+	@Transactional
+	public Void delete(Long carId) {
+		Car car = carRepository.findById(carId)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.CAR_NOT_FOUND));
+
+		carRepository.delete(car);
+		return null;
 	}
 }

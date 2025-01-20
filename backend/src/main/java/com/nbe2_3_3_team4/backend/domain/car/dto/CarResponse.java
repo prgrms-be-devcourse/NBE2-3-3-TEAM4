@@ -14,11 +14,13 @@ public record CarResponse() {
 		}
 	}
 
-	public record GetCars(
-		List<Car> cars
+	public record GetCar(
+		Long id,
+		String carNumber,
+		boolean isPrimary
 	) {
-		public static GetCars from(List<Car> cars) {
-			return new GetCars(cars);
+		public static GetCar from(Car car) {
+			return new GetCar(car.getId(), car.getNumber(), car.getIsPrimary());
 		}
 	}
 }

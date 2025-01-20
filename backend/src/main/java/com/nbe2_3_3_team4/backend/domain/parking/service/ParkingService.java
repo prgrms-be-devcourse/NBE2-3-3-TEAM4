@@ -7,6 +7,8 @@ import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking;
 import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus;
 import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingRepository;
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket;
+import com.nbe2_3_3_team4.backend.global.exception.ErrorCode;
+import com.nbe2_3_3_team4.backend.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,22 @@ import java.util.function.Predicate;
 public class ParkingService {
 
 	private final ParkingRepository parkingRepository;
+
+	@Transactional(readOnly = true)
+	public ParkingResponse.GetParking getParking(Long parkingId) {
+		Parking parking = parkingRepository.findById(parkingId)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.PKLT_NOT_FOUND));
+
+		return ParkingResponse.GetParking.from(parking);
+	}
+
+	@Transactional(readOnly = true)
+	public ParkingResponse.GetParkingStatus getParkingStatus(Long parkingId) {
+		Parking parking = parkingRepository.findById(parkingId)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.PKLT_NOT_FOUND));
+
+		return ParkingResponse.GetParkingStatus.from(parking.getParkingStatus());
+	}
 
 	public List<ParkingResponse.GetNearbyParking> getNearbyParking(Double lat, Double lng) {
 		List<Parking> parkingList = getParkingList();

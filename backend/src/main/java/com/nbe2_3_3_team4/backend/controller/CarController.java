@@ -14,6 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cars")
@@ -27,7 +29,8 @@ public class CarController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<CarResponse.RegCar>> registerCar(
 		@AuthenticationPrincipal User user, @RequestBody CarRequest.RegCar dto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(carService.registerCar(dto, user.getUsername())));
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(ApiResponse.createSuccess(carService.registerCar(dto, user.getUsername())));
 	}
 
 	@Operation(summary = "대표 차량 수정 API", description = "대표 차량 등록 또는 해제를 처리합니다.")
@@ -35,13 +38,33 @@ public class CarController {
 	@PutMapping("/{carId}/primary")
 	public ResponseEntity<ApiResponse<Void>> registerCarPrimary(
 		@PathVariable Long carId) {
-		return ResponseEntity.ok().body(ApiResponse.createSuccess(carService.updatePrimary(carId)));
+		return ResponseEntity.ok()
+			.body(ApiResponse.createSuccess(carService.updatePrimary(carId)));
 	}
 
 	@Operation(summary = "회원 차량 목록 조회 API", description = "차량 목록을 조회합니다.")
 	@ApiResponses({@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공")})
 	@GetMapping
-	public ResponseEntity<ApiResponse<CarResponse.GetCars>> getCars(@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok().body(ApiResponse.createSuccess(carService.getCars(user.getUsername())));
+	public ResponseEntity<ApiResponse<List<CarResponse.GetCar>>> getCars(
+		@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok()
+			.body(ApiResponse.createSuccess(carService.getCars(user.getUsername())));
 	}
+
+	@Operation(summary = "차량 정보 수정 API", description = "차량 정보를 수정합니다.")
+	@ApiResponses({@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "성공")})
+	@PutMapping("/{carId}")
+	public ResponseEntity<ApiResponse<Void>> updateCar(@PathVariable Long carId, @RequestBody CarRequest.modify dto) {
+		return ResponseEntity.ok()
+			.body(ApiResponse.createSuccess(carService.modify(carId, dto)));
+	}
+
+	@Operation(summary = "차량 삭제 API", description = "차량을 삭제합니다.")
+	@ApiResponses({@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "성공")})
+	@DeleteMapping("/{carId}")
+	public ResponseEntity<ApiResponse<Void>> deleteCar(@PathVariable Long carId) {
+		return ResponseEntity.ok()
+			.body(ApiResponse.createSuccess(carService.delete(carId)));
+	}
+
 }

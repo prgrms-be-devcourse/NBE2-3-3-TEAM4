@@ -54,5 +54,13 @@ public class MemberService {
 		return null;
 	}
 
+	@Transactional(readOnly = true)
+	public Void verify(String email) {
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+
+		return null;
+	}
+
 
 }

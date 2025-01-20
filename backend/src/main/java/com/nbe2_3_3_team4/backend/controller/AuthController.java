@@ -83,7 +83,7 @@ public class AuthController {
 	@GetMapping("/kakao/search")
 	public ResponseEntity<ApiResponse<List<KakaoResponse.Place>>> searchPlace(
 		@Parameter(description = "검색 키워드") @RequestParam(value = "keyword") String keyword,
-		@Parameter(description = "한 페이지 당 항목 개수(최대 45개)") @RequestParam(value = "size") int size) {
+		@Parameter(description = "한 페이지 당 항목 개수(최대 15개)") @RequestParam(value = "size") int size) {
 		return ResponseEntity.ok()
 			.body(ApiResponse.createSuccess(kaKaoService.searchPlace(keyword, size)));
 	}

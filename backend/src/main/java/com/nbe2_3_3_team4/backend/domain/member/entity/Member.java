@@ -44,7 +44,8 @@ public class Member extends BaseTime {
 	@Enumerated(EnumType.STRING)
 	private LoginType loginType;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "member_id")
 	private List<Car> cars = new ArrayList<>();
 
 	public static Member to(MemberRequest.Join dto, PasswordEncoder passwordEncoder, Role role) {
@@ -62,7 +63,7 @@ public class Member extends BaseTime {
 		this.contact = contact;
 	}
 	public Car addCar(Car car) {
-		cars.add(car);
+		this.cars.add(car);
 		return car;
 	}
 }

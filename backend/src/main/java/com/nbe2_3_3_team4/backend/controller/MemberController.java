@@ -10,6 +10,7 @@ import com.nbe2_3_3_team4.backend.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,6 +33,15 @@ public class MemberController {
 		return ResponseEntity.ok()
 			.body(ApiResponse.createSuccess(memberService.modifyInfo(dto, user.getUsername())));
 	}
+
+	@Operation(summary = "회원 인증 API", description = "회원 유무를 인증합니다.")
+	@ApiResponses({@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공")})
+	@GetMapping("/verify")
+	public ResponseEntity<ApiResponse<Void>> verify(@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok()
+			.body(ApiResponse.createSuccess(memberService.verify(user.getUsername())));
+	}
+
 
 
 }
