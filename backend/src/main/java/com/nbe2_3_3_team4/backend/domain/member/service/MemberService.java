@@ -49,7 +49,7 @@ public class MemberService {
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
-		member.updateMember(dto.name(),dto.contact());
+		member.updateMember(dto.name(), dto.contact());
 
 		return null;
 	}
@@ -62,5 +62,11 @@ public class MemberService {
 		return null;
 	}
 
+	@Transactional(readOnly = true)
+	public MemberResponse.GetMember getMember(String email) {
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
+		return MemberResponse.GetMember.from(member);
+	}
 }

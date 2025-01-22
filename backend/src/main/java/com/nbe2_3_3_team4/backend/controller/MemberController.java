@@ -42,6 +42,14 @@ public class MemberController {
 			.body(ApiResponse.createSuccess(memberService.verify(user.getUsername())));
 	}
 
-
+	@Operation(summary = "회원 정보 조회 API", description = "회원 정보를 조회합니다.")
+	@ApiResponses({
+		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공")
+	})
+	@GetMapping
+	public ResponseEntity<ApiResponse<MemberResponse.GetMember>> getMemberInfo(@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok()
+			.body(ApiResponse.createSuccess(memberService.getMember(user.getUsername())));
+	}
 
 }
