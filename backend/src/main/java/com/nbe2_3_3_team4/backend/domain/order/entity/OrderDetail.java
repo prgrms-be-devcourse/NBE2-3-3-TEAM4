@@ -3,7 +3,6 @@ package com.nbe2_3_3_team4.backend.domain.order.entity;
 import com.nbe2_3_3_team4.backend.global.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
