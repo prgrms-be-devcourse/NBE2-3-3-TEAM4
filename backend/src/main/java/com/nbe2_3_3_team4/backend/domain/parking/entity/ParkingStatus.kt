@@ -1,38 +1,24 @@
-package com.nbe2_3_3_team4.backend.domain.parking.entity;
+package com.nbe2_3_3_team4.backend.domain.parking.entity
 
-
-import com.fasterxml.jackson.databind.JsonNode;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.databind.JsonNode
+import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
-@Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Table(name = "parking_status")
-public class ParkingStatus {
+data class ParkingStatus (
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var parkingStatusId: Long? = null,
+    var totalParkingSpace: Int = 0, // 총 주차 면
+    var usedParkingSpace: Int = 0, // 사용중인 주차 면
+    var space_updated_at: LocalDateTime? = null // 사용 주차면 업데이트 시간
+) {
+    fun ModifyTotalParkingSpaceOfJson() { this.totalParkingSpace += 1 }
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long parkingStatusId;
-
-	private int totalParkingSpace;          // 총 주차 면
-	private int usedParkingSpace;           // 사용중인 주차 면
-
-	private LocalDateTime space_updated_at; // 사용 주차면 업데이트 시간
-
-	public static ParkingStatus to(JsonNode data) {
-		return ParkingStatus.builder()
-			.totalParkingSpace(data.get("tpkct").asInt())
-			.usedParkingSpace(data.get("now_prk_vhcl_cnt").asInt())
-			.space_updated_at(LocalDateTime.now())
-			.build();
-	}
-
-	public void ModifyTotalParkingSpaceOfJson() {
-		this.totalParkingSpace += 1;
-	}
+    companion object {
+		fun to(data: JsonNode): ParkingStatus {
+            return ParkingStatus ( null, data["tpkct"].asInt(), data["now_prk_vhcl_cnt"].asInt(), LocalDateTime.now() )
+        }
+    }
 }
