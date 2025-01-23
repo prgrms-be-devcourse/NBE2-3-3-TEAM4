@@ -1,11 +1,6 @@
-package com.nbe2_3_3_team4.backend.global.exception;
+package com.nbe2_3_3_team4.backend.global.exception
 
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+class AccessDeniedException(val errorCode: ErrorCode) : RuntimeException() {
 
-@RequiredArgsConstructor
-@Getter
-public class AccessDeniedException extends RuntimeException {
-	private final ErrorCode errorCode;
 }

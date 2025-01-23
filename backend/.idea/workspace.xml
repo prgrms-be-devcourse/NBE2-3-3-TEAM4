@@ -5,20 +5,123 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e1c9e67f-5b6e-4d1d-810b-9b383cd16fd8" name="Changes" comment="FIX. CAR 관련 오류 수정">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/Order.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/OrderDetail.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/enums/OrderStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/enums/PaymentStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/repository/OrderDetailRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/repository/OrderRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/service/OrderService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/backend.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/BackendApplication.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/config/SecurityConfig.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/config/SwaggerConfig.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/AdminController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/AuthController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/CarController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/MemberController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/ParkingController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/dto/CarRequest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/dto/CarResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/entity/Car.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/repository/CarRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/service/CarService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/kakao/dto/KakaoResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/kakao/service/KakaoService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/dto/MemberRequest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/entity/Member.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/repository/MemberRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/service/MemberService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/entity/Parking.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/entity/ParkingStatus.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/repository/ParkingRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/service/ParkingService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/ticket/entity/Ticket.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/BaseTime.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/constant/ResponseStatus.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/AccessDeniedException.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/BadRequestException.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/DuplicateException.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/ErrorCode.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/GlobalExceptionHandler.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/JWTCustomException.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/NotFoundException.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/response/ApiResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/dto/TokenRequest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/dto/TokenResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/handler/JWTAccessDeniedHandler.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/handler/JWTAuthenticationEntryPoint.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/handler/JWTFilter.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/handler/JwtFilterExceptionHandler.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/service/CustomUserDetailService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/util/TokenProvider.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/ttukttak_parking.main.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/entity/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/entity/Car.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/entity/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/service/MemberService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/BackendApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/config/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/config/SwaggerConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/AdminController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/CarController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/MemberController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/ParkingController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/dto/CarRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/dto/CarResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/entity/Car.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/repository/CarRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/service/CarService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/kakao/dto/KakaoResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/kakao/service/KakaoService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/dto/MemberRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/entity/Member.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/repository/MemberRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/service/MemberService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/Order.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/OrderDetail.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/enums/OrderStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/enums/PaymentStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/repository/OrderDetailRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/repository/OrderRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/service/OrderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/entity/Parking.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/entity/ParkingStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/repository/ParkingRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/service/ParkingService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/ticket/entity/Ticket.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/BaseTime.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/constant/ResponseStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/AccessDeniedException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/BadRequestException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/DuplicateException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/ErrorCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/JWTCustomException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/NotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/response/ApiResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/dto/TokenRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/dto/TokenResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/handler/JWTAccessDeniedHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/handler/JWTAuthenticationEntryPoint.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/handler/JWTFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/handler/JwtFilterExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/service/CustomUserDetailService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/security/util/TokenProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,17 +145,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="ttukttak_parking" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="ttukttak_parking" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="ttukttak_parking" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -91,6 +183,9 @@
     &quot;accountId&quot;: &quot;7ea0aa0a-8a92-4860-b074-d90e4ab12848&quot;
   }
 }</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -102,32 +197,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.backend [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.backend 빌드.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.BackendApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.TtukttakParkingApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Dev/ttukttak-parking/backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Java&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.backend [clean].executor": "Run",
+    "Gradle.backend 빌드.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.BackendApplication.executor": "Run",
+    "Spring Boot.TtukttakParkingApplication.executor": "Run",
+    "git-widget-placeholder": "feature/kotlin__basic__migration",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/sideProject/backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Java",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Spring Boot.BackendApplication">
     <configuration name="backend [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -164,7 +260,7 @@
     </configuration>
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="envFilePaths">
-        <option value="$PROJECT_DIR$/../../../Doc/.env" />
+        <option value="$PROJECT_DIR$/../env" />
       </option>
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="ttukttak_parking.main" />
@@ -176,19 +272,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Gradle.backend [clean]" />
+      <item itemvalue="Spring Boot.BackendApplication" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.backend [clean]" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -218,6 +310,8 @@
       <workItem from="1737353600590" duration="4959000" />
       <workItem from="1737456719485" duration="1000" />
       <workItem from="1737504681455" duration="2634000" />
+      <workItem from="1737526297209" duration="22960000" />
+      <workItem from="1737594425591" duration="12729000" />
     </task>
     <task id="LOCAL-00001" summary="초기">
       <option name="closed" value="true" />

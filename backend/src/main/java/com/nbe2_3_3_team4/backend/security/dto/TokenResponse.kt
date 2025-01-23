@@ -1,18 +1,15 @@
-package com.nbe2_3_3_team4.backend.security.dto;
+package com.nbe2_3_3_team4.backend.security.dto
 
-public record TokenResponse() {
-
-    public record Create(
-        String accessToken,
-        String refreshToken,
-        String email
+class TokenResponse {
+    @JvmRecord
+    data class Create(val accessToken: String,
+                      val refreshToken: String,
+                      val email: String
     ) {
-
-        public static Create from(String accessToken, String refreshToken, String email) {
-            return new Create(accessToken, refreshToken, email);
+        companion object {
+            fun from(accessToken: String, refreshToken: String, email: String): Create {
+                return Create(accessToken, refreshToken, email)
+            }
         }
-
     }
-
-
 }

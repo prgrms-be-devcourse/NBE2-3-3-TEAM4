@@ -1,41 +1,43 @@
-package com.nbe2_3_3_team4.backend.domain.car.entity;
+package com.nbe2_3_3_team4.backend.domain.car.entity
 
-import com.nbe2_3_3_team4.backend.domain.car.dto.CarRequest;
-import com.nbe2_3_3_team4.backend.domain.member.dto.MemberRequest;
-import com.nbe2_3_3_team4.backend.domain.member.entity.Member;
-import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking;
-import com.nbe2_3_3_team4.backend.global.BaseTime;
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.nbe2_3_3_team4.backend.domain.car.dto.CarRequest
+import com.nbe2_3_3_team4.backend.global.BaseTime
+import jakarta.persistence.*
 
-@Builder
-@Getter
+
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "cars")
-public class Car extends BaseTime {
+class Car() : BaseTime() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "car_id")
+    var id: Long? = null
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "car_id")
-	private Long id;
-	@Column(name = "car_number")
-	private String number;
-	@Column(name = "is_primary")
-	private Boolean isPrimary;
+    @Column(name = "car_number")
+    var number: String? = null
 
-	public void updateIsPrimary(Boolean isPrimary) {
-		this.isPrimary = isPrimary;
-	}
-	public void modify(CarRequest.modify dto) {
-		this.number = dto.carNumber();
-	}
-	public static Car to(CarRequest.RegCar dto) {
-		return Car.builder()
-			.number(dto.carNumber())
-			.isPrimary(dto.isPrimary())
-			.build();
-	}
+    @Column(name = "is_primary")
+    var isPrimary: Boolean? = null
+
+    constructor(number: String, isPrimary: Boolean) : this() {
+        this.isPrimary = isPrimary
+        this.number = number
+    }
+
+    fun updateIsPrimary(isPrimary: Boolean?) {
+        if(isPrimary==true){this.isPrimary = false}
+        else{this.isPrimary = true}
+
+    }
+
+    fun modify(dto: CarRequest.Modify) {
+        this.number = dto.carNumber
+        this.isPrimary = dto.isPrimary
+    }
+
+    companion object {
+        fun to(dto: CarRequest.RegCar): Car {
+            return Car(number = dto.carNumber, isPrimary = dto.isPrimary)
+        }
+    }
 }

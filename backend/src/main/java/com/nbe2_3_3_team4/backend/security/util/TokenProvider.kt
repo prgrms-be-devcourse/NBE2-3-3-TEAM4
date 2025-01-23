@@ -1,115 +1,102 @@
-package com.nbe2_3_3_team4.backend.security.util;
+package com.nbe2_3_3_team4.backend.security.util
 
-import com.nbe2_3_3_team4.backend.security.dto.TokenResponse;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
-
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
+import com.nbe2_3_3_team4.backend.security.dto.TokenResponse
+import io.jsonwebtoken.*
+import io.jsonwebtoken.io.Decoders
+import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SecurityException
+import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.User
+import org.springframework.stereotype.Component
+import java.security.Key
+import java.util.*
+import java.util.stream.Collectors
 
 @Component
-@Slf4j
-public class TokenProvider implements InitializingBean {
+class TokenProvider(@param:Value("\${jwt.secret-key}") private val SECRET_KEY: String,
+                    @Value("\${jwt.token-validity-in-seconds}") tokenValidityInSeconds: Long
+) : InitializingBean {
+    private val accessTokenValidityInMilliSeconds = tokenValidityInSeconds * 1000 //60분
+    private val refreshTokenValidityInMilliSeconds = accessTokenValidityInMilliSeconds * 336 //14일
+    private var key: Key? = null
 
-	private static final String AUTHORITIES_KEY = "auth";
-	private final String SECRET_KEY;
-	private final long accessTokenValidityInMilliSeconds;
-	private final long refreshTokenValidityInMilliSeconds;
-	private Key key;
+    // BeanFactory 에 의해 모든 property 가 설정되고 난 뒤 실행되는 메소드
+    // secret key 주입
+    override fun afterPropertiesSet() {
+        val keyBytes: ByteArray = Decoders.BASE64.decode(this.SECRET_KEY)
+        key = Keys.hmacShaKeyFor(keyBytes)
+    }
 
-	public TokenProvider(
-		@Value("${jwt.secret-key}") String secretKey,
-		@Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds
-	) {
-		this.SECRET_KEY = secretKey;
-		this.accessTokenValidityInMilliSeconds = tokenValidityInSeconds * 1000;   //60분
-		this.refreshTokenValidityInMilliSeconds = accessTokenValidityInMilliSeconds * 336;  //14일
-	}
+    // 토큰 생성
+    fun createAllToken(authentication: Authentication): TokenResponse.Create {
+        //비공개키 암호화 방식 사용
 
-	// BeanFactory 에 의해 모든 property 가 설정되고 난 뒤 실행되는 메소드
-	// secret key 주입
-	@Override
-	public void afterPropertiesSet() {
-		byte[] keyBytes = Decoders.BASE64.decode(this.SECRET_KEY);
-		key = Keys.hmacShaKeyFor(keyBytes);
-	}
+        val authorities = authentication.authorities.stream()
+                .map { obj: GrantedAuthority -> obj.authority }
+                .collect(Collectors.joining(","))
 
-	// 토큰 생성
-	public TokenResponse.Create createAllToken(Authentication authentication) {
+        return TokenResponse.Create.from(
+                Jwts.builder()
+                        .setSubject(authentication.name)
+                        .claim(AUTHORITIES_KEY, authorities)
+                        .signWith(key, SignatureAlgorithm.HS512)
+                        .setExpiration(createTokenValidity(this.accessTokenValidityInMilliSeconds))
+                        .compact(),
+                Jwts.builder()
+                        .setSubject(authentication.name)
+                        .signWith(key, SignatureAlgorithm.HS512)
+                        .setExpiration(createTokenValidity(this.refreshTokenValidityInMilliSeconds))
+                        .compact(),
+                authentication.name)
+    }
 
-		//비공개키 암호화 방식 사용
-		String authorities = authentication.getAuthorities().stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
+    private fun createTokenValidity(milliseconds: Long): Date {
+        return Date(Date().time + milliseconds)
+    }
 
-		return TokenResponse.Create.from(
-			Jwts.builder()
-				.setSubject(authentication.getName())
-				.claim(AUTHORITIES_KEY, authorities)
-				.signWith(key, SignatureAlgorithm.HS512)
-				.setExpiration(createTokenValidity(this.accessTokenValidityInMilliSeconds))
-				.compact(),
-			Jwts.builder()
-				.setSubject(authentication.getName())
-				.signWith(key, SignatureAlgorithm.HS512)
-				.setExpiration(createTokenValidity(this.refreshTokenValidityInMilliSeconds))
-				.compact(),
-			authentication.getName());
+    fun getAuthentication(token: String?): Authentication {
+        val claims: Claims = Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .body
 
-	}
+        val authorities: Collection<GrantedAuthority> =
+                Arrays.stream(claims[AUTHORITIES_KEY].toString().split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
+                        .map { role: String? -> SimpleGrantedAuthority(role) }
+                        .collect(Collectors.toList())
 
-	private Date createTokenValidity(long milliseconds) {
-		return new Date((new Date()).getTime() + milliseconds);
-	}
+        val user = User(claims.subject, "password", authorities)
 
-	public Authentication getAuthentication(String token) {
-		Claims claims = Jwts
-			.parserBuilder()
-			.setSigningKey(key)
-			.build()
-			.parseClaimsJws(token)
-			.getBody();
+        return UsernamePasswordAuthenticationToken(user, token, authorities)
+    }
 
-		Collection<? extends GrantedAuthority> authorities =
-			Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
+    fun findUser(refreshToken: String?): String {
+        val claims: Claims = Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(refreshToken)
+                .body
+        return claims.subject
+    }
 
-		User user = new User(claims.getSubject(), "password", authorities);
-
-		return new UsernamePasswordAuthenticationToken(user, token, authorities);
-	}
-
-	public String findUser(String refreshToken) {
-		Claims claims = Jwts
-			.parserBuilder()
-			.setSigningKey(key)
-			.build()
-			.parseClaimsJws(refreshToken)
-			.getBody();
-		return claims.getSubject();
-	}
-
-	// exception 발생 안하면 true 반환
-	// exception 반환시 JwtFilterExceptionHandler 에서 처리
-	public boolean validateToken(String token)
-		throws ExpiredJwtException, io.jsonwebtoken.security.SecurityException, MalformedJwtException, UnsupportedJwtException, IllegalArgumentException {
-		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-		return true;
-	}
+    // exception 발생 안하면 true 반환
+    // exception 반환시 JwtFilterExceptionHandler 에서 처리
+    @Throws(ExpiredJwtException::class, SecurityException::class, MalformedJwtException::class, UnsupportedJwtException::class, IllegalArgumentException::class)
+    fun validateToken(token: String?): Boolean {
+        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
+        return true
+    }
 
 
+    companion object {
+        private const val AUTHORITIES_KEY = "auth"
+    }
 }

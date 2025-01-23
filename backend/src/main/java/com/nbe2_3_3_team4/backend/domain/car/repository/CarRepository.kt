@@ -1,8 +1,10 @@
-package com.nbe2_3_3_team4.backend.domain.car.repository;
+package com.nbe2_3_3_team4.backend.domain.car.repository
 
-import com.nbe2_3_3_team4.backend.domain.car.entity.Car;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.nbe2_3_3_team4.backend.domain.car.entity.Car
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
-public interface CarRepository extends JpaRepository<Car, Long> {
-	boolean existsByNumber(String number);
+@Repository
+interface CarRepository : JpaRepository<Car?, Long?> {
+    fun existsByNumber(number: String?): Boolean
 }

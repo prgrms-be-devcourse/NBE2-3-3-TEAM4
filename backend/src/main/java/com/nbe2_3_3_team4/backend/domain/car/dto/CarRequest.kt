@@ -1,17 +1,10 @@
-package com.nbe2_3_3_team4.backend.domain.car.dto;
+package com.nbe2_3_3_team4.backend.domain.car.dto
 
-public record CarRequest() {
+class CarRequest {
+    data class RegCar(val carNumber: String,
+                      val isPrimary: Boolean
+    )
 
-	public record RegCar(
-		String carNumber,
-		boolean isPrimary
-	) {
+    data class Modify(val carNumber: String, val isPrimary: Boolean)
 
-	}
-
-	public record modify(
-		String carNumber
-	) {
-
-	}
 }

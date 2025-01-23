@@ -1,29 +1,26 @@
-package com.nbe2_3_3_team4.backend.domain.kakao.dto;
+package com.nbe2_3_3_team4.backend.domain.kakao.dto
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode
 
-public record KakaoResponse() {
-
-    public record Place(
-        Long placeId,
-        String address,
-        String roadAddress,
-        Double x,
-        Double y,
-        String name
+class KakaoResponse {
+    data class Place(val placeId: Long,
+                     val address: String,
+                     val roadAddress: String,
+                     val x: Double,
+                     val y: Double,
+                     val name: String
     ) {
-
-        public static Place from(JsonNode data) {
-            return new Place(
-                data.get("id").asLong(),
-                data.get("address_name").asText(),
-                data.get("road_address_name").asText(),
-                data.get("x").asDouble(),
-                data.get("y").asDouble(),
-                data.get("place_name").asText()
-            );
+        companion object {
+            fun from(data: JsonNode): Place {
+                return Place(
+                        data["id"].asLong(),
+                        data["address_name"].asText(),
+                        data["road_address_name"].asText(),
+                        data["x"].asDouble(),
+                        data["y"].asDouble(),
+                        data["place_name"].asText()
+                )
+            }
         }
-
     }
-
 }

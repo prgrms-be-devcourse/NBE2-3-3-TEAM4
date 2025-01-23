@@ -1,32 +1,14 @@
-package com.nbe2_3_3_team4.backend.domain.member.dto;
+package com.nbe2_3_3_team4.backend.domain.member.dto
 
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameter
 
-public record MemberRequest() {
+class MemberRequest {
+    class Join(val name: String, val email: String, val password: String, val contact: String
+    )
+    class Login(@Parameter(description = "email") var email: String,
+                @Parameter(description = "비밀번호") var password: String
+    )
 
-	public record Join(
-		String name,
-		String email,
-		String password,
-		String contact
-	) {
-
-	}
-
-	public record Login(
-		@Parameter(description = "email")
-		String email,
-		@Parameter(description = "비밀번호")
-		String password
-	) {
-
-	}
-
-	public record Modify(
-		String contact,
-		String name) {
-
-	}
-
-
+    class  Modify(var contact: String,
+                 val name: String)
 }

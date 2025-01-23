@@ -1,31 +1,39 @@
-package com.nbe2_3_3_team4.backend.domain.parking.dto;
+package com.nbe2_3_3_team4.backend.domain.parking.dto
 
-import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking;
-import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus;
+import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
+import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
 
-public record ParkingResponse() {
-
-    public record GetNearbyParking(Long id, String name, Double latitude, Double longitude, String status) {
-        public static GetNearbyParking from(Parking parking, String status) {
-            return new GetNearbyParking(parking.getParkingId(), parking.getName(), parking.getLatitude(), parking.getLongitude(), status);
+class ParkingResponse {
+    data class GetNearbyParking(val id: Long?, val name: String?, val latitude: Double?, val longitude: Double?, val status: String?) {
+        companion object {
+            @JvmStatic
+            fun from(parking: Parking, status: String): GetNearbyParking {
+                return GetNearbyParking(parking.parkingId, parking.name, parking.latitude, parking.longitude, status)
+            }
         }
     }
 
-    public record GetParking(String name, String address, String weOpenTime, String weEndTime,
-                             String wdOpenTime, String wdEndTime, int basicCharge, int addCharge, int addChargeTime) {
-        public static GetParking from(Parking parking) {
-            return new GetParking(parking.getName(), parking.getAddress(),
-                parking.getWeOpenTime(), parking.getWeEndTime(), parking.getWdOpenTime(), parking.getWdEndTime(),
-                parking.getBasicCharge(), parking.getAddCharge(), parking.getAddChargeTime());
+    data class GetParking(val name: String?, val address: String?, val weOpenTime: String?, val weEndTime: String?,
+                     val wdOpenTime: String?, val wdEndTime: String?, val basicCharge: Int?, val addCharge: Int?, val addChargeTime: Int?) {
+        companion object {
+            @JvmStatic
+            fun from(parking: Parking): GetParking {
+                return GetParking(parking.name, parking.address,
+                        parking.weOpenTime, parking.weEndTime, parking.weOpenTime, parking.weEndTime,
+                        parking.basicCharge, parking.addCharge, parking.addChargeTime)
+            }
         }
     }
 
-    public record GetParkingStatus(int availableSpace,
-                                   int usedSpace,
-                                   int totalSpace) {
-        public static GetParkingStatus from(ParkingStatus status) {
-            return new GetParkingStatus(
-                status.getTotalParkingSpace() - status.getUsedParkingSpace(), status.getUsedParkingSpace(), status.getTotalParkingSpace());
+    data class GetParkingStatus(val availableSpace: Int?,
+                           val usedSpace: Int?,
+                           val totalSpace: Int?) {
+        companion object {
+            @JvmStatic
+            fun from(status: ParkingStatus): GetParkingStatus {
+                return GetParkingStatus(
+                        status.totalParkingSpace - status.usedParkingSpace, status.usedParkingSpace, status.totalParkingSpace)
+            }
         }
     }
 }

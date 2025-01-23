@@ -1,28 +1,29 @@
-package com.nbe2_3_3_team4.backend.domain.member.dto;
+package com.nbe2_3_3_team4.backend.domain.member.dto
 
-import com.nbe2_3_3_team4.backend.domain.member.entity.Member;
-import com.nbe2_3_3_team4.backend.domain.member.entity.enums.LoginType;
-import com.nbe2_3_3_team4.backend.domain.member.entity.enums.Role;
+import com.nbe2_3_3_team4.backend.domain.member.entity.Member
+import com.nbe2_3_3_team4.backend.domain.member.entity.enums.LoginType
+import com.nbe2_3_3_team4.backend.domain.member.entity.enums.Role
 
-public record MemberResponse() {
-
-    public record Join(
-        Member member
+class MemberResponse {
+    data class Join(val member: Member
     ) {
-        public static Join from(Member member) {
-            return new Join(member);
+        companion object {
+            fun from(member: Member): Join {
+                return Join(member)
+            }
         }
     }
 
-    public record GetMember(
-        String name,
-        String email,
-        String contact,
-        Role role,
-        LoginType loginType
+    data class GetMember(var name: String?,
+                    var email: String?,
+                    var contact: String?,
+                    var role: Role?,
+                    var loginType: LoginType?
     ) {
-        public static GetMember from(Member member) {
-            return new GetMember(member.getName(), member.getEmail(), member.getContact(), member.getRole(), member.getLoginType());
+        companion object {
+            fun from(member: Member): GetMember {
+                return GetMember(member.name, member.email, member.contact, member.role, member.loginType)
+            }
         }
     }
 }

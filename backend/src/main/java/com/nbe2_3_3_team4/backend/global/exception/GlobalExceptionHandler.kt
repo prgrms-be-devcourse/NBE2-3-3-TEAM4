@@ -1,130 +1,131 @@
-package com.nbe2_3_3_team4.backend.global.exception;
+package com.nbe2_3_3_team4.backend.global.exception
 
-import com.nbe2_3_3_team4.backend.global.response.ApiResponse;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
+import com.nbe2_3_3_team4.backend.global.response.ApiResponse
+import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindingResult
+import org.springframework.validation.ObjectError
+import org.springframework.web.HttpRequestMethodNotSupportedException
+import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.servlet.NoHandlerFoundException
+import java.io.IOException
+import java.util.stream.Collectors
+import jakarta.persistence.EntityNotFoundException
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 공통 예외처리 클래스
  */
-@Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler {
-
-	// 중복 체크
-	@ExceptionHandler(DuplicateException.class)
-	public ResponseEntity<ApiResponse<Object>> handleDuplicateAccountException(DuplicateException e) {
-		log.error("[DuplicateAccountException] message: {}", e.getMessage());
-		ErrorCode errorCode = ErrorCode.USER_ALREADY_EXIST;
-		return ResponseEntity.status(errorCode.getStatus())
-			.body(ApiResponse.createError(errorCode.getMessage()));
-	}
+class GlobalExceptionHandler {
 
 
-	// validation 체크
-	private String bindingResultErrorsCheck(BindingResult bindingResult) {
-		Map<String, String> errorMap = new HashMap<>();
-		for (FieldError fe : bindingResult.getFieldErrors()) {
-			errorMap.put(fe.getField(), fe.getDefaultMessage());
-		}
-		return errorMap.toString();
-	}
+    private val log = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
-	// 잘못된 경로 에러 404
-	@ExceptionHandler(NoHandlerFoundException.class)
-	public ResponseEntity<ApiResponse<Object>> handleNoHandlerFoundException(NoHandlerFoundException e) {
-		log.error("[NoHandlerFoundException] message: {}", e.getMessage());
-		ErrorCode errorCode = ErrorCode.NOT_FOUND;
-		return ResponseEntity.status(errorCode.getStatus())
-			.body(ApiResponse.createError(errorCode.getMessage()));
-	}
+    private inline fun <reified GlobalExceptionHandler> GlobalExceptionHandler.logger() = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)!!
 
-	// Http Method 에러
-	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	public ResponseEntity<ApiResponse<Object>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-		log.error("[HttpRequestMethodNotSupportedException] message: {}", e.getMessage());
-		ErrorCode errorCode = ErrorCode.METHOD_NOT_ALLOWED;
-		return ResponseEntity.status(errorCode.getStatus())
-			.body(ApiResponse.createError(errorCode.getMessage()));
-	}
+    // 중복 체크
+    @ExceptionHandler(DuplicateException::class)
+    fun handleDuplicateAccountException(e: DuplicateException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[DuplicateAccountException] message: {}", e.message)
+        val errorCode = ErrorCode.USER_ALREADY_EXIST
+        return ResponseEntity.status(errorCode.status)
+                .body(ApiResponse.createError(errorCode.message))
+    }
 
-	// IllegalArgumentException
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(IllegalArgumentException e) {
-		log.error("[IllegalArgumentException] message: {}", e.getMessage());
-		ErrorCode errorCode = ErrorCode.BAD_REQUEST;
-		return ResponseEntity.status(errorCode.getStatus())
-			.body(ApiResponse.createErrorWithMsg(e.getMessage()));
-	}
 
-	// 각종 400 에러
-	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<ApiResponse<Object>> handleBadRequestException(BadRequestException e) {
-		log.error("[BadRequestException] message: {}", e.getMessage());
-		return ResponseEntity.status(e.getErrorCode().getStatus())
-			.body(ApiResponse.createError(e.getErrorCode().getMessage()));
-	}
+    // validation 체크
+    private fun bindingResultErrorsCheck(bindingResult: BindingResult): String {
+        val errorMap: MutableMap<String, String> = HashMap()
+        for (fe in bindingResult.fieldErrors) {
+            errorMap[fe.field] = fe.defaultMessage.toString()
+        }
+        return errorMap.toString()
+    }
 
-	// 각종 404 에러
-	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<ApiResponse<Object>> handleNotFoundException(NotFoundException e) {
-		log.error("[NotFoundException] message: {}", e.getMessage());
-		return ResponseEntity.status(e.getErrorCode().getStatus())
-			.body(ApiResponse.createError(e.getErrorCode().getMessage()));
-	}
+    // 잘못된 경로 에러 404
+    @ExceptionHandler(NoHandlerFoundException::class)
+    fun handleNoHandlerFoundException(e: NoHandlerFoundException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[NoHandlerFoundException] message: {}", e.message)
+        val errorCode = ErrorCode.NOT_FOUND
+        return ResponseEntity.status(errorCode.status)
+                .body(ApiResponse.createError(errorCode.message))
+    }
 
-	// 유효성 검사 에러
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ApiResponse<Object>> handleValidationExceptions(
-		MethodArgumentNotValidException e) {
-		log.error("[MethodArgumentNotValidException] message: {}", e.getMessage());
-		final String errorMessage = e.getBindingResult().getAllErrors().stream()
-			.map(DefaultMessageSourceResolvable::getDefaultMessage)
-			.collect(Collectors.joining("\n"));
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createError(errorMessage));
-	}
+    // Http Method 에러
+    @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
+    fun handleHttpRequestMethodNotSupportedException(e: HttpRequestMethodNotSupportedException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[HttpRequestMethodNotSupportedException] message: {}", e.message)
+        val errorCode = ErrorCode.METHOD_NOT_ALLOWED
+        return ResponseEntity.status(errorCode.status)
+                .body(ApiResponse.createError(errorCode.message))
+    }
 
-	// Entity 조회 실패 시 에러
-	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity<ApiResponse<Object>> handleEntityNotFoundException(EntityNotFoundException e) {
-		log.error("[EntityNotFoundException] message: {}", e.getMessage());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.createError(e.getMessage()));
-	}
+    // IllegalArgumentException
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[IllegalArgumentException] message: {}", e.message)
+        val errorCode = ErrorCode.BAD_REQUEST
+        return ResponseEntity.status(errorCode.status)
+                .body(ApiResponse.createErrorWithMsg(e.message))
+    }
 
-	@ExceptionHandler(IOException.class)
-	public ResponseEntity<ApiResponse<Object>> handleIOException(IOException e) {
-		log.error("[IOException] message: {}", e.getMessage());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.createError(e.getMessage()));
-	}
+    // 각종 400 에러
+    @ExceptionHandler(BadRequestException::class)
+    fun handleBadRequestException(e: BadRequestException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[BadRequestException] message: {}", e.message)
+        return ResponseEntity.status(e.errorCode.status)
+                .body(ApiResponse.createError(e.errorCode.message))
+    }
 
-	@ExceptionHandler(JWTCustomException.class)
-	public ResponseEntity<ApiResponse<Object>> handleJwtExceptionException(JWTCustomException e) {
-		log.error("[JwtExceptionError] message: {}", e.getErrorCode().getMessage());
-		return ResponseEntity.status(e.getErrorCode().getStatus())
-			.body(ApiResponse.createError(e.getErrorCode().getMessage()));
-	}
+    // 각종 404 에러
+    @ExceptionHandler(NotFoundException::class)
+    fun handleNotFoundException(e: NotFoundException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[NotFoundException] message: {}", e.message)
+        return ResponseEntity.status(e.errorCode.status)
+                .body<ApiResponse<Any>>(ApiResponse.createError(e.errorCode.message))
+    }
 
-	// 위의 경우를 제외한 모든 에러 500
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ApiResponse<Object>> handleException(Exception e) {
-		log.error("[Exception] message: {},{}", e.getMessage(), e.getClass(), e.getCause());
-		ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-		return ResponseEntity.status(errorCode.getStatus())
-			.body(ApiResponse.createError(errorCode.getMessage()));
-	}
+    // 유효성 검사 에러
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidationExceptions(
+            e: MethodArgumentNotValidException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[MethodArgumentNotValidException] message: {}", e.message)
+        val errorMessage = e.bindingResult.allErrors.stream()
+                .map { obj: ObjectError -> obj.defaultMessage }
+                .collect(Collectors.joining("\n"))
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createError(errorMessage))
+    }
+
+    // Entity 조회 실패 시 에러
+    @ExceptionHandler(EntityNotFoundException::class)
+    fun handleEntityNotFoundException(e: EntityNotFoundException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[EntityNotFoundException] message: {}", e.message)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.createError(e.message))
+    }
+
+    @ExceptionHandler(IOException::class)
+    fun handleIOException(e: IOException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[IOException] message: {}", e.message)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.createError(e.message))
+    }
+
+    @ExceptionHandler(JWTCustomException::class)
+    fun handleJwtExceptionException(e: JWTCustomException): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[JwtExceptionError] message: {}", e.errorCode.message)
+        return ResponseEntity.status(e.errorCode.status)
+                .body(ApiResponse.createError(e.errorCode.message))
+    }
+
+    // 위의 경우를 제외한 모든 에러 500
+    @ExceptionHandler(Exception::class)
+    fun handleException(e: Exception): ResponseEntity<ApiResponse<Any>> {
+        logger().error("[Exception] message: {},{}", e.message, e.javaClass, e.cause)
+        val errorCode = ErrorCode.INTERNAL_SERVER_ERROR
+        return ResponseEntity.status(errorCode.status)
+                .body(ApiResponse.createError(errorCode.message))
+    }
 }

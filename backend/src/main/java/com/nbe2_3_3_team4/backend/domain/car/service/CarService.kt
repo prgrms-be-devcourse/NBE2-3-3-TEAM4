@@ -1,80 +1,53 @@
-package com.nbe2_3_3_team4.backend.domain.car.service;
+package com.nbe2_3_3_team4.backend.domain.car.service
 
-import com.nbe2_3_3_team4.backend.domain.car.dto.CarRequest;
-import com.nbe2_3_3_team4.backend.domain.car.dto.CarResponse;
-import com.nbe2_3_3_team4.backend.domain.car.entity.Car;
-import com.nbe2_3_3_team4.backend.domain.car.repository.CarRepository;
-import com.nbe2_3_3_team4.backend.domain.member.entity.Member;
-import com.nbe2_3_3_team4.backend.domain.member.repository.MemberRepository;
-import com.nbe2_3_3_team4.backend.global.exception.DuplicateException;
-import com.nbe2_3_3_team4.backend.global.exception.ErrorCode;
-import com.nbe2_3_3_team4.backend.global.exception.NotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.nbe2_3_3_team4.backend.domain.car.dto.CarRequest
+import com.nbe2_3_3_team4.backend.domain.car.dto.CarResponse
+import com.nbe2_3_3_team4.backend.domain.car.dto.CarResponse.GetCar
+import com.nbe2_3_3_team4.backend.domain.car.entity.Car
+import com.nbe2_3_3_team4.backend.domain.car.repository.CarRepository
+import com.nbe2_3_3_team4.backend.domain.member.repository.MemberRepository
+import com.nbe2_3_3_team4.backend.global.exception.DuplicateException
+import com.nbe2_3_3_team4.backend.global.exception.ErrorCode
+import com.nbe2_3_3_team4.backend.global.exception.NotFoundException
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-@RequiredArgsConstructor
-public class CarService {
+open class CarService(private val carRepository : CarRepository ,private val memberRepository: MemberRepository) {
+    @Transactional
+    open fun registerCar(dto: CarRequest.RegCar, email: String?): CarResponse.RegCar {
+        val member = memberRepository.findByEmail(email)?.orElse(null) ?: throw  NotFoundException(ErrorCode.USER_NOT_FOUND)
+        if(carRepository.existsByNumber(dto.carNumber)) {throw DuplicateException(ErrorCode.CAR_ALREADY_EXISTS)}
 
-	private final CarRepository carRepository;
-	private final MemberRepository memberRepository;
+        return CarResponse.RegCar.from(member.addCar(Car.to(dto)))
+    }
 
-	@Transactional
-	public CarResponse.RegCar registerCar(CarRequest.RegCar dto, String email) {
-		Member member = memberRepository.findByEmail(email)
-			.orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    @Transactional
+    open fun updatePrimary(carId: Long) {
+        val car = carRepository.findById(carId).orElse(null) ?: throw NotFoundException(ErrorCode.CAR_NOT_FOUND)
+        car.updateIsPrimary(car.isPrimary)
+    }
 
-		if (carRepository.existsByNumber(dto.carNumber())) {
-			throw new DuplicateException(ErrorCode.CAR_ALREADY_EXISTS);
-		}
+    @Transactional(readOnly = true)
+    open fun getCars(email: String?): List<GetCar> {
+        val member = memberRepository.findByEmail(email)?.orElse(null) ?: throw NotFoundException(ErrorCode.USER_NOT_FOUND)
+        val cars: MutableList<GetCar> = ArrayList()
+        for (car in member.cars) {
+            cars.add(GetCar.from(car))
+        }
+        return cars
+    }
 
-		return CarResponse.RegCar.from(member.addCar(Car.to(dto)));
-	}
+    @Transactional
+    open fun modify(carId: Long, dto: CarRequest.Modify){
+        val car = carRepository.findById(carId).orElse(null) ?: throw NotFoundException(ErrorCode.CAR_NOT_FOUND)
+        car.modify(dto)
+    }
 
-	@Transactional
-	public Void updatePrimary(Long carId) {
-		Car car = carRepository.findById(carId)
-			.orElseThrow(() -> new NotFoundException(ErrorCode.CAR_NOT_FOUND));
-
-		car.updateIsPrimary(!car.getIsPrimary());
-
-		return null;
-	}
-
-	@Transactional(readOnly = true)
-	public List<CarResponse.GetCar> getCars(String email) {
-		Member member = memberRepository.findByEmail(email)
-			.orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
-
-		List<CarResponse.GetCar> cars = new ArrayList<>();
-
-		for(Car car : member.getCars()) {
-			cars.add(CarResponse.GetCar.from(car));
-		}
-
-		return cars;
-	}
-
-	@Transactional
-	public Void modify(Long carId, CarRequest.modify dto) {
-		Car car = carRepository.findById(carId)
-			.orElseThrow(() -> new NotFoundException(ErrorCode.CAR_NOT_FOUND));
-
-		car.modify(dto);
-
-		return null;
-	}
-
-	@Transactional
-	public Void delete(Long carId) {
-		Car car = carRepository.findById(carId)
-			.orElseThrow(() -> new NotFoundException(ErrorCode.CAR_NOT_FOUND));
-
-		carRepository.delete(car);
-		return null;
-	}
+    @Transactional
+    open fun delete(carId: Long): Void? {
+        val car = carRepository.findById(carId).orElse(null) ?: throw NotFoundException(ErrorCode.CAR_NOT_FOUND);
+        carRepository.delete(car)
+        return null
+    }
 }
