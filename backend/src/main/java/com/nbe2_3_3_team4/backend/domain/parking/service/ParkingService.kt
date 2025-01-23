@@ -1,141 +1,112 @@
-package com.nbe2_3_3_team4.backend.domain.parking.service;
+package com.nbe2_3_3_team4.backend.domain.parking.service
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse;
-import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking;
-import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus;
-import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingRepository;
-import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket;
-import com.nbe2_3_3_team4.backend.global.exception.ErrorCode;
-import com.nbe2_3_3_team4.backend.global.exception.NotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.Predicate;
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParking
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParkingStatus
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetNearbyParking
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetNearbyParking.Companion.from
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParking.Companion.from
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParkingStatus.Companion.from
+import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
+import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking.Companion.to
+import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
+import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingRepository
+import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
+import com.nbe2_3_3_team4.backend.global.exception.ErrorCode
+import com.nbe2_3_3_team4.backend.global.exception.NotFoundException
+import lombok.RequiredArgsConstructor
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.ClassPathResource
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import kotlin.math.cos
 
 @Service
 @RequiredArgsConstructor
-public class ParkingService {
+open class ParkingService {
 
-	private final ParkingRepository parkingRepository;
+    @Autowired(required = true)
+    private lateinit var parkingRepository: ParkingRepository
 
-	@Transactional(readOnly = true)
-	public ParkingResponse.GetParking getParking(Long parkingId) {
-		Parking parking = parkingRepository.findById(parkingId)
-			.orElseThrow(() -> new NotFoundException(ErrorCode.PKLT_NOT_FOUND));
+    open fun getParkingList() : List<Parking?> {
+        return parkingRepository.findAll()
+    }
 
-		return ParkingResponse.GetParking.from(parking);
-	}
+    @Transactional(readOnly = true)
+    open fun getParking(parkingId: Long): GetParking {
+        val parking = parkingRepository.findById(parkingId)
+            .orElseThrow { NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!!
 
-	@Transactional(readOnly = true)
-	public ParkingResponse.GetParkingStatus getParkingStatus(Long parkingId) {
-		Parking parking = parkingRepository.findById(parkingId)
-			.orElseThrow(() -> new NotFoundException(ErrorCode.PKLT_NOT_FOUND));
+        return from(parking)
+    }
 
-		return ParkingResponse.GetParkingStatus.from(parking.getParkingStatus());
-	}
+    @Transactional(readOnly = true)
+    open fun getParkingStatus(parkingId: Long): GetParkingStatus {
+        val parking = parkingRepository.findById(parkingId)
+            .orElseThrow { NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!!
 
-	public List<ParkingResponse.GetNearbyParking> getNearbyParking(Double lat, Double lng) {
-		List<Parking> parkingList = getParkingList();
-		List<Parking> nearbyParkingList = filterNearbyParking(parkingList, lat, lng);
-		return calculateCongestionAndSort(nearbyParkingList);
-	}
+        return from(parking.parkingStatus!!)
+    }
 
-	public List<Parking> getParkingList() {
-		return parkingRepository.findAll();
-	}
+    fun getNearbyParking(lat: Double, lng: Double): List<GetNearbyParking> {
+        println("False")
+        val parkingList = getParkingList()
+        println("true")
+        return calculateCongestionAndSort(filterNearbyParking(parkingList, lat, lng))
+    }
 
-	public List<Parking> filterNearbyParking(List<Parking> parkingList, Double latitude, Double longitude) {
-		double KM = 0.5;
-		double lngDifference = KM / 111 / (Math.cos(latitude));
+    private fun filterNearbyParking(parkingList: List<Parking?>, latitude: Double, longitude: Double): List<Parking?> {
+        val KM = 0.5
+        val lngDifference = KM / 111 / (cos(latitude))
 
-		Predicate<Parking> latFilter = parking ->
-			parking.getLatitude() > latitude - (KM / 111)
-				&& latitude + (KM / 111) > parking.getLatitude();
-		Predicate<Parking> lngFilter = parking ->
-			parking.getLongitude() > longitude - lngDifference
-				&& parking.getLongitude() < longitude + lngDifference;
+        return parkingList.filter {
+                    it?.latitude!! in (latitude - (KM / 111))..(latitude + (KM / 111)) &&
+                    it.longitude!! in (longitude - lngDifference)..(longitude + lngDifference) }
 
-		return parkingList.stream()
-			.filter(latFilter.and(lngFilter))
-			.toList();
-	}
+    }
 
-	private List<ParkingResponse.GetNearbyParking> calculateCongestionAndSort(List<Parking> parkingList) {
-		return parkingList.stream().sorted(
-				Comparator.comparingDouble(
-					pklt -> {
-						ParkingStatus status = pklt.getParkingStatus();
-						return (double) status.getUsedParkingSpace() / status.getTotalParkingSpace() * 100;
-					}))
-			.map(pklt -> {
-				ParkingStatus status = pklt.getParkingStatus();
-				double percentage = (double) status.getUsedParkingSpace() / status.getTotalParkingSpace() * 100;
-				String congestionStatus;
-				if (percentage <= 30) {
-					congestionStatus = "여유";
-				} else if (percentage <= 70) {
-					congestionStatus = "보통";
-				} else {
-					congestionStatus = "혼잡";
-				}
-				return ParkingResponse.GetNearbyParking.from(pklt, congestionStatus);
-			}).toList();
-	}
+    private fun calculateCongestionAndSort(parkingList: List<Parking?>): List<GetNearbyParking> {
+        return parkingList
+            .sortedBy { pklt -> pklt?.parkingStatus?.let {
+                    it.usedParkingSpace.toDouble() / it.totalParkingSpace * 100 // 주차장 혼잡도 계산
+                } ?: 0.0 }
+            .map { from(it!!, it.parkingStatus?.let { status ->
+                    val congestionPercentage = status.usedParkingSpace.toDouble() / status.totalParkingSpace * 100
+                    when {
+                        congestionPercentage <= 30 -> "여유"
+                        congestionPercentage <= 70 -> "보통"
+                        else -> "혼잡"
+                    } } ?: "정보 없음") }.toList()
+    }
 
-	@Transactional
-	public Void loadDefaultDataByJson() throws IOException {
-		ObjectMapper objectMapper = new ObjectMapper();
+    @Transactional
+    open fun loadDefaultDataByJson(): Void? {
+        val objectMapper = ObjectMapper()
+        val dataArray = objectMapper.readTree(ClassPathResource("static/data.json").file)["DATA"]
 
-		JsonNode root = objectMapper.readTree(new ClassPathResource("static/data.json").getFile());
-		JsonNode dataArray = root.get("DATA");
+        dataArray.forEach { data ->
+            parkingRepository.findByName(data["pklt_nm"].asText())?.let { // 이미 존재하는 주차장인 경우
+                it.parkingStatus?.ModifyTotalParkingSpaceOfJson() // 주차장의 총 주차면수 증가
+            } ?: run { // 새로운 주차장인 경우
+                parkingRepository.save(to(data, ParkingStatus.to(data))) // 새로운 주차장인 경우 저장
+            }
+        }
+        return null
+    }
 
-		for (JsonNode data : dataArray) {
-			String parkingName = data.get("pklt_nm").asText();
+    @Transactional
+    open fun loadDefaultTickets(): Void? {
+        getParkingList().forEach { parking ->
+            // 기본 요금과 기본 시간 설정 (null 혹은 0일 경우 기본값 설정)
+            val basicCharge = parking?.basicCharge.takeIf { it != 0 } ?: 200
+            val basicChargeTime = parking?.basicChargeTime.takeIf { it != 0 } ?: 5
 
-			Parking parking = parkingRepository.findByName(parkingName);
-
-			if (parking == null) {
-				parkingRepository.save(Parking.to(data, ParkingStatus.to(data)));
-			} else {
-				parking.getParkingStatus().ModifyTotalParkingSpaceOfJson();
-			}
-		}
-
-		return null;
-	}
-
-	@Transactional
-	public Void loadDefaultTickets() {
-		List<Parking> parkingList = parkingRepository.findAll();
-		int[] nums = {1, 2, 4, 6, 12};
-
-		for (Parking parking : parkingList) {
-
-			// 1시간 2시간 4시간 6시간 12시간
-			// bsc_prk_crg => 기본 요금
-			// bsc_prk_hr => 분단위
-			for (int num : nums) {
-				int basicCharge = parking.getBasicCharge();
-				int basicChargeTime = parking.getBasicChargeTime();
-
-				if (basicCharge == 0) {
-					basicCharge = 220;
-					basicChargeTime = 5;
-				}
-
-				int result = (basicCharge / basicChargeTime) * 60 * num;
-
-				parking.regTicket(Ticket.to(parking, result, num));
-			}
-		}
-
-		return null;
-	}
+            // 1시간, 2시간, 4시간, 6시간, 12시간에 대해 티켓을 생성
+            intArrayOf(1, 2, 4, 6, 12).forEach { num ->
+                val result = (basicCharge / basicChargeTime) * 60 * num
+                parking?.regTicket(Ticket.to(parking, result, num))
+            }
+        }
+        return null
+    }
 }

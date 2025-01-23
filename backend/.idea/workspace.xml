@@ -4,21 +4,219 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e1c9e67f-5b6e-4d1d-810b-9b383cd16fd8" name="Changes" comment="FIX. CAR 관련 오류 수정">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/Order.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/OrderDetail.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/enums/OrderStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/entity/enums/PaymentStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/repository/OrderDetailRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/repository/OrderRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/order/service/OrderService.java" afterDir="false" />
+    <list default="true" id="e1c9e67f-5b6e-4d1d-810b-9b383cd16fd8" name="Changes" comment="주차장 마이그레이션">
+      <change afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/BackendApplication.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/config/SecurityConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/config/SwaggerConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/controller/AdminController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/controller/AuthController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/controller/CarController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/controller/MemberController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/controller/ParkingControllerJava.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/dto/CarRequest$RegCar.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/dto/CarRequest$modify.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/dto/CarRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/dto/CarResponse$GetCar.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/dto/CarResponse$RegCar.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/dto/CarResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/entity/Car$CarBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/entity/Car.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/repository/CarRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/car/service/CarService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/kakao/dto/KakaoResponse$Place.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/kakao/dto/KakaoResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/kakao/service/KakaoService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/dto/MemberRequest$Join.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/dto/MemberRequest$Login.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/dto/MemberRequest$Modify.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/dto/MemberRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse$GetMember.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse$Join.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/entity/Member$MemberBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/entity/Member.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/entity/enums/LoginType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/entity/enums/Role.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/repository/MemberRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/member/service/MemberService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/entity/Order$OrderBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/entity/Order.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/entity/OrderDetail$OrderDetailBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/entity/OrderDetail.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/entity/enums/OrderStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/entity/enums/PaymentStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/repository/OrderDetailRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/repository/OrderRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/order/service/OrderService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/ticket/entity/Ticket$TicketBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/domain/ticket/entity/Ticket.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/BaseTime.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/constant/ResponseStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/exception/AccessDeniedException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/exception/BadRequestException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/exception/DuplicateException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/exception/ErrorCode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/exception/GlobalExceptionHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/exception/JWTCustomException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/response/ApiResponse$ApiResponseBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/global/response/ApiResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/dto/TokenRequest$Update.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/dto/TokenRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/dto/TokenResponse$Create.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/dto/TokenResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/handler/JWTAccessDeniedHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/handler/JWTAuthenticationEntryPoint.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/handler/JWTFilter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/handler/JwtFilterExceptionHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/service/CustomUserDetailService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/com/nbe2_3_3_team4/backend/security/util/TokenProvider.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/META-INF/ttukttak_parking.kotlin_module" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/controller/ParkingController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse$GetNearbyParking$Companion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse$GetNearbyParking.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse$GetParking$Companion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse$GetParking.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse$GetParkingStatus$Companion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse$GetParkingStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/entity/Parking$Companion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/entity/Parking.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/entity/ParkingStatus$Companion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/entity/ParkingStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/repository/ParkingRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/service/ParkingService$calculateCongestionAndSort$$inlined$sortedBy$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/domain/parking/service/ParkingService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/kotlin/main/com/nbe2_3_3_team4/backend/global/exception/NotFoundException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-fq-name-to-source.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-fq-name-to-source.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-fq-name-to-source.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-fq-name-to-source.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-fq-name-to-source.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-fq-name-to-source.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-fq-name-to-source.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/java-sources-proto-map.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/java-sources-proto-map.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/java-sources-proto-map.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/java-sources-proto-map.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/java-sources-proto-map.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/java-sources-proto-map.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/java-sources-proto-map.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/subtypes.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/subtypes.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/subtypes.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/subtypes.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/subtypes.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/subtypes.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/subtypes.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/counters.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/file-to-id.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/file-to-id.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/file-to-id.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/file-to-id.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/file-to-id.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/file-to-id.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/file-to-id.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.keystream" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.keystream.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values.at" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab_i" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab_i.len" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/cacheable/last-build.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/classpath-snapshot/shrunk-classpath-snapshot.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/kotlin/compileKotlin/local-state/build-history.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/resources/main/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/resources/main/static/data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/AdminController.class.uniqueId1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ParkingControllerJava.class.uniqueId0" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/ParkingController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/entity/Parking.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/entity/ParkingStatus.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/repository/ParkingRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/service/ParkingService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/NotFoundException.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/entity/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/car/entity/Car.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/dto/MemberResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/entity/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/member/service/MemberService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/controller/ParkingController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/dto/ParkingResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/entity/Parking.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/entity/ParkingStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/repository/ParkingRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/domain/parking/service/ParkingService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nbe2_3_3_team4/backend/global/exception/NotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,8 +263,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Kotlin Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -88,7 +287,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/prgrms-be-devcourse/NBE2-3-3-TEAM4.git&quot;,
-    &quot;accountId&quot;: &quot;7ea0aa0a-8a92-4860-b074-d90e4ab12848&quot;
+    &quot;accountId&quot;: &quot;f532b98c-efd1-42d6-b591-7231deca5e61&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -102,32 +301,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.backend [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.backend 빌드.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.BackendApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.TtukttakParkingApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Dev/ttukttak-parking/backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Java&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.backend [clean].executor": "Run",
+    "Gradle.backend 빌드.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.BackendApplication.executor": "Run",
+    "Spring Boot.TtukttakParkingApplication.executor": "Run",
+    "git-widget-placeholder": "feature/#4-Parking-마이그레이션",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Devcours/Project03/backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.nbe2_3_3_team4.backend.controller" />
+      <recent name="com.nbe2_3_3_team4.backend.domain.parking.service" />
+      <recent name="com.nbe2_3_3_team4.backend.domain.parking.repository" />
+      <recent name="com.nbe2_3_3_team4.backend.domain.parking.entity" />
+    </key>
+  </component>
   <component name="RunManager" selected="Spring Boot.BackendApplication">
     <configuration name="backend [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -164,7 +371,7 @@
     </configuration>
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="envFilePaths">
-        <option value="$PROJECT_DIR$/../../../Doc/.env" />
+        <option value="$PROJECT_DIR$/.env" />
       </option>
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="ttukttak_parking.main" />
@@ -172,10 +379,24 @@
         <option name="environmentVariables" />
       </selectedOptions>
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.nbe2_3_3_team4.backend.BackendApplication" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Gradle.backend [clean]" />
+      <item itemvalue="Spring Boot.BackendApplication" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.backend [clean]" />
@@ -185,8 +406,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
       </set>
     </attachedChunks>
   </component>
@@ -218,6 +439,9 @@
       <workItem from="1737353600590" duration="4959000" />
       <workItem from="1737456719485" duration="1000" />
       <workItem from="1737504681455" duration="2634000" />
+      <workItem from="1737527959780" duration="2630000" />
+      <workItem from="1737554828965" duration="80000" />
+      <workItem from="1737554920576" duration="18032000" />
     </task>
     <task id="LOCAL-00001" summary="초기">
       <option name="closed" value="true" />
@@ -241,9 +465,29 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="초기" />
     <MESSAGE value="FIX. CAR 관련 오류 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="FIX. CAR 관련 오류 수정" />
+    <MESSAGE value="주차장 변경" />
+    <MESSAGE value="주차장 마이그레이션" />
+    <option name="LAST_COMMIT_MESSAGE" value="주차장 마이그레이션" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="SpringBootApplicationConfigurationType">
+        <watch expression="((AdvisedDispatcher)this.CGLIB$CALLBACK_4).advised" custom="com.nbe2_3_3_team4.backend.domain.parking.service.ParkingService,org.springframework.aop.framework.CglibAopProxy.AdvisedDispatcher" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
