@@ -55,5 +55,7 @@ enum class ErrorCode(// 1. status = 날려줄 상태코드
     //-7000 Car
     CAR_ALREADY_EXISTS(409, -7000, "이미 등록된 차량입니다."),
     CAR_NOT_PRIMARY(400, -7001, "해당 차량은 대표 차량이 아닙니다"),
-    CAR_NOT_FOUND(404, -7002, "차량 정보를 찾을 수 없습니다.")
+    CAR_NOT_FOUND(404, -7002, "차량 정보를 찾을 수 없습니다."),
+    CAR_LIMIT_OVER(400, -7003, "등록 가능한 차량 대수는 최대 3대입니다.");
+
 }
