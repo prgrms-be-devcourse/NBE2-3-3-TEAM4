@@ -19,7 +19,7 @@ class Ticket(parking: Parking?, price: Int?, parkingDuration: Int?) : BaseTime()
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parking_id")
-    private val parking: Parking? = null
+    val parking: Parking? = null
 
     companion object {
         fun to(parking: Parking?, price: Int, parkingDuration: Int): Ticket {
