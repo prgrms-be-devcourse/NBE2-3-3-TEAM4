@@ -2,8 +2,8 @@ package com.nbe2_3_3_team4.backend.domain.parking.entity
 
 
 import com.fasterxml.jackson.databind.JsonNode
-import java.time.LocalDateTime
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "parking_status")
@@ -15,6 +15,10 @@ class ParkingStatus(var totalParkingSpace: Int, var usedParkingSpace: Int, priva
 
     fun modifyTotalParkingSpaceOfJson(){
         this.totalParkingSpace += 1;
+    }
+
+    fun decreaseUsedParkingSpace() {
+        this.usedParkingSpace -= 1
     }
 
     companion object {
