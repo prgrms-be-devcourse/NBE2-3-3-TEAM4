@@ -11,7 +11,7 @@ class Parking() : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "parking_id")
-    val parkingId: Long? = null
+    var parkingId: Long? = null
 
     @Column(name = "name")
     var name: String? = null
