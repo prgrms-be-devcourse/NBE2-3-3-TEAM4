@@ -14,7 +14,6 @@ import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingRepository
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.global.exception.ErrorCode
 import com.nbe2_3_3_team4.backend.global.exception.NotFoundException
-import lombok.RequiredArgsConstructor
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,11 +21,12 @@ import kotlin.math.cos
 
 const val KM = 0.5
 const val latKm = KM / 111
+const val defaultCharge = 200
+const val defaultChargeTime = 5
 val lowCongestion = 0.0..30.0 // 혼잡도 범위 여유
 val mediumCongestion = 30.0..70.0 // 혼잡도 범위 보통
 
 @Service
-@RequiredArgsConstructor
 open class ParkingService( private val parkingRepository: ParkingRepository ) {
 
     @get:Transactional(readOnly = true)
@@ -66,7 +66,7 @@ open class ParkingService( private val parkingRepository: ParkingRepository ) {
     private fun ParkingStatus.getCongestionRate(): Double = usedParkingSpace.toDouble() / totalParkingSpace * 100
 
     @Transactional
-    open fun loadDefaultDataByJson(): Void? {
+    open fun loadDefaultDataByJson() {
         val objectMapper = ObjectMapper()
         val dataArray = objectMapper.readTree(ClassPathResource("static/data.json").file)["DATA"]
 
@@ -74,19 +74,17 @@ open class ParkingService( private val parkingRepository: ParkingRepository ) {
             parkingRepository.findByName(data["pklt_nm"].asText())?.let { // 이미 존재하는 주차장인 경우
                 it.parkingStatus?.ModifyTotalParkingSpaceOfJson() // 주차장의 총 주차면수 증가
             } ?: run { parkingRepository.save(to(data, ParkingStatus.to(data))) } } // 새로운 주차장인 경우 저장
-        return null
     }
 
     @Transactional
-    open fun loadDefaultTickets(): Void? {
+    open fun loadDefaultTickets() {
         parkingList.forEach { parking ->
-            val basicCharge = parking?.basicCharge?.takeIf { it != 0 } ?: 200 // 기본 요금 200원
-            val basicChargeTime = parking?.basicChargeTime?.takeIf { it != 0 } ?: 5 // 기본 요금 시간 5분
+            val basicCharge = parking?.basicCharge?.takeIf { it != 0 } ?: defaultCharge // 기본 요금 200원
+            val basicChargeTime = parking?.basicChargeTime?.takeIf { it != 0 } ?: defaultChargeTime // 기본 요금 시간 5분
 
             intArrayOf(1, 2, 4, 6, 12).forEach { num -> // 1, 2, 4, 6, 12시간 주차권 생성
                 val result = (basicCharge / basicChargeTime) * 60 * num
                 parking?.regTicket(Ticket.to(parking, result, num))
             } }
-        return null
     }
 }
