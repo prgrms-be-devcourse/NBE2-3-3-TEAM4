@@ -11,6 +11,7 @@ import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking.Companion.to
 import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
 import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingRepository
+import com.nbe2_3_3_team4.backend.domain.ticket.dto.TicketResponse.GetTicket
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.global.exception.ErrorCode
 import com.nbe2_3_3_team4.backend.global.exception.NotFoundException
@@ -27,21 +28,21 @@ val lowCongestion = 0.0..30.0 // 혼잡도 범위 여유
 val mediumCongestion = 30.0..70.0 // 혼잡도 범위 보통
 
 @Service
-open class ParkingService( private val parkingRepository: ParkingRepository ) {
+class ParkingService( private val parkingRepository: ParkingRepository ) {
 
     @get:Transactional(readOnly = true)
-    open val parkingList: List<Parking?> get() = parkingRepository.findAll().filterNotNull() // 주차장 목록 조회
+    val parkingList: List<Parking?> get() = parkingRepository.findAll().filterNotNull() // 주차장 목록 조회
 
     @Transactional(readOnly = true)
-    open fun getParking(parkingId: Long): GetParking = from( parkingRepository.findById(parkingId) // 주차장 조회
+    fun getParking(parkingId: Long): GetParking = from( parkingRepository.findById(parkingId) // 주차장 조회
             .orElseThrow { NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!! ) // 예외 처리
 
     @Transactional(readOnly = true)
-    open fun getParkingStatus(parkingId: Long): GetParkingStatus = from( parkingRepository.findById(parkingId) // 주차장 상태 조회
+    fun getParkingStatus(parkingId: Long): GetParkingStatus = from( parkingRepository.findById(parkingId) // 주차장 상태 조회
             .orElseThrow { NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!!.parkingStatus!! ) // 예외 처리
 
     @Transactional(readOnly = true)
-    open fun getNearbyParking(lat: Double, lng: Double): List<GetNearbyParking> = calculateCongestionAndSort(filterNearbyParking(parkingList, lat, lng)) // 주변 주차장 조회
+    fun getNearbyParking(lat: Double, lng: Double): List<GetNearbyParking> = calculateCongestionAndSort(filterNearbyParking(parkingList, lat, lng)) // 주변 주차장 조회
 
     private fun filterNearbyParking(parkingList: List<Parking?>, latitude: Double, longitude: Double): List<Parking?> {
         val lngDifference = latKm / (cos(latitude)) // 경도 차이 계산
@@ -66,7 +67,7 @@ open class ParkingService( private val parkingRepository: ParkingRepository ) {
     private fun ParkingStatus.getCongestionRate(): Double = usedParkingSpace.toDouble() / totalParkingSpace * 100
 
     @Transactional
-    open fun loadDefaultDataByJson() {
+    fun loadDefaultDataByJson() {
         val objectMapper = ObjectMapper()
         val dataArray = objectMapper.readTree(ClassPathResource("static/data.json").file)["DATA"]
 
@@ -77,7 +78,7 @@ open class ParkingService( private val parkingRepository: ParkingRepository ) {
     }
 
     @Transactional
-    open fun loadDefaultTickets() {
+    fun loadDefaultTickets() {
         parkingList.forEach { parking ->
             val basicCharge = parking?.basicCharge?.takeIf { it != 0 } ?: defaultCharge // 기본 요금 200원
             val basicChargeTime = parking?.basicChargeTime?.takeIf { it != 0 } ?: defaultChargeTime // 기본 요금 시간 5분
@@ -87,4 +88,8 @@ open class ParkingService( private val parkingRepository: ParkingRepository ) {
                 parking?.regTicket(Ticket.to(parking, result, num))
             } }
     }
+
+    @Transactional(readOnly = true)
+    fun getTicketList(parkingId: Long): List<GetTicket> = parkingRepository.findById(parkingId)
+        .orElseThrow { NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!!.tickets.map { GetTicket.from(it) } // 주차장 주차권 목록 조회
 }

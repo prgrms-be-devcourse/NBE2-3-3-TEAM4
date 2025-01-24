@@ -2,6 +2,7 @@ package com.nbe2_3_3_team4.backend.controller
 
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.*
 import com.nbe2_3_3_team4.backend.domain.parking.service.ParkingService
+import com.nbe2_3_3_team4.backend.domain.ticket.dto.TicketResponse.GetTicket
 import com.nbe2_3_3_team4.backend.global.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -28,9 +29,7 @@ class ParkingController(val parkingService: ParkingService) {
     @Operation(summary = "주차장 조회 API", description = "주차장을 조회합니다.")
     @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"))
     @GetMapping("/{parkingId}")
-    fun getNearbyParking(
-            @PathVariable parkingId: Long
-    ): ResponseEntity<ApiResponse<GetParking>> {
+    fun getNearbyParking(@PathVariable parkingId: Long): ResponseEntity<ApiResponse<GetParking>> {
         return ResponseEntity.ok()
                 .body(ApiResponse.createSuccess(parkingService.getParking(parkingId)))
     }
@@ -38,10 +37,16 @@ class ParkingController(val parkingService: ParkingService) {
     @Operation(summary = "주차장 잔여 자리 조회 API", description = "주차장의 잔여 자리를 조회합니다.")
     @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"))
     @GetMapping("/{parkingId}/status")
-    fun getParkingStatus(
-            @PathVariable parkingId: Long
-    ): ResponseEntity<ApiResponse<GetParkingStatus>> {
+    fun getParkingStatus(@PathVariable parkingId: Long): ResponseEntity<ApiResponse<GetParkingStatus>> {
         return ResponseEntity.ok()
                 .body(ApiResponse.createSuccess(parkingService.getParkingStatus(parkingId)))
+    }
+
+    @Operation(summary = "주차장 주차권 리스트 조회 API", description = "해당 주차장 주차권 정보를 수정합니다.")
+    @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "성공"))
+    @GetMapping("/{parkingId}/tickets")
+    fun getTicketList(@PathVariable parkingId: Long): ResponseEntity<ApiResponse<List<GetTicket>>> {
+        return ResponseEntity.ok()
+                .body(ApiResponse.createSuccess(parkingService.getTicketList(parkingId)))
     }
 }
