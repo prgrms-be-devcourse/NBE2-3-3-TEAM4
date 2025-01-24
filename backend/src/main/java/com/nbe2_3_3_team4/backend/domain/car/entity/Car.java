@@ -35,7 +35,7 @@ public class Car extends BaseTime {
 	public static Car to(CarRequest.RegCar dto) {
 		return Car.builder()
 			.number(dto.carNumber())
-			.isPrimary(dto.isPrimary())
+			.isPrimary(false)
 			.build();
 	}
 }
