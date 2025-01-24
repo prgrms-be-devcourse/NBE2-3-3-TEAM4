@@ -61,7 +61,7 @@ class JWTFilter(private val tokenProvider: TokenProvider) : OncePerRequestFilter
                 "/api/auth/reissue",
                 "/api/auth/signup/admin",
                 "/ttukttak-parking/**",
-                "/api/kakao/search",
+                "/api/auth/kakao/search",
                 "/api/parking/**",
         )
 

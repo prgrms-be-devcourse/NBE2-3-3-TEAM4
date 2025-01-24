@@ -32,12 +32,11 @@ class Car() : BaseTime() {
 
     fun modify(dto: CarRequest.Modify) {
         this.number = dto.carNumber
-        this.isPrimary = dto.isPrimary
     }
 
     companion object {
         fun to(dto: CarRequest.RegCar): Car {
-            return Car(number = dto.carNumber, isPrimary = dto.isPrimary)
+            return Car(number = dto.carNumber, isPrimary = false)
         }
     }
 }
