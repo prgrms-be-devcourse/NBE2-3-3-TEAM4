@@ -2,7 +2,6 @@ package com.nbe2_3_3_team4.backend.controller
 
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.*
 import com.nbe2_3_3_team4.backend.domain.parking.service.ParkingService
-import com.nbe2_3_3_team4.backend.domain.ticket.dto.TicketResponse.GetTicket
 import com.nbe2_3_3_team4.backend.global.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -40,13 +39,5 @@ class ParkingController(val parkingService: ParkingService) {
     fun getParkingStatus(@PathVariable parkingId: Long): ResponseEntity<ApiResponse<GetParkingStatus>> {
         return ResponseEntity.ok()
                 .body(ApiResponse.createSuccess(parkingService.getParkingStatus(parkingId)))
-    }
-
-    @Operation(summary = "주차장 주차권 리스트 조회 API", description = "해당 주차장 주차권 정보를 수정합니다.")
-    @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "성공"))
-    @GetMapping("/{parkingId}/tickets")
-    fun getTicketList(@PathVariable parkingId: Long): ResponseEntity<ApiResponse<List<GetTicket>>> {
-        return ResponseEntity.ok()
-                .body(ApiResponse.createSuccess(parkingService.getTicketList(parkingId)))
     }
 }
