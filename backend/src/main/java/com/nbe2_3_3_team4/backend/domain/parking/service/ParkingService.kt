@@ -11,7 +11,6 @@ import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking.Companion.to
 import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
 import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingRepository
-import com.nbe2_3_3_team4.backend.domain.ticket.dto.TicketResponse.GetTicket
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.global.exception.ErrorCode
 import com.nbe2_3_3_team4.backend.global.exception.NotFoundException
@@ -88,8 +87,4 @@ class ParkingService( private val parkingRepository: ParkingRepository ) {
                 parking?.regTicket(Ticket.to(parking, result, num))
             } }
     }
-
-    @Transactional(readOnly = true)
-    fun getTicketList(parkingId: Long): List<GetTicket> = parkingRepository.findById(parkingId)
-        .orElseThrow { NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!!.tickets.map { GetTicket.from(it) } // 주차장 주차권 목록 조회
 }

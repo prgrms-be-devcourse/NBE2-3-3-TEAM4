@@ -7,9 +7,9 @@ import com.nbe2_3_3_team4.backend.global.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -26,9 +26,9 @@ class OrderController(
     @PostMapping("/tickets")
     fun createOrder(
         @RequestBody dto: OrderRequest.CreateOrder,
-        @AuthenticationPrincipal user: SecurityProperties.User
+        @AuthenticationPrincipal user: User
     ): ResponseEntity<ApiResponse<OrderResponse.CreateOrder>> {
-        val response = orderService.createOrder(dto, user.name)
+        val response = orderService.createOrder(dto, user.username)
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(response))
     }
 
@@ -52,10 +52,10 @@ class OrderController(
     @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "성공"))
     @PutMapping("/{orderId}/cancel")
     fun cancelTicket(
-        @AuthenticationPrincipal user: SecurityProperties.User,
+        @AuthenticationPrincipal user: User,
         @PathVariable orderId: String
     ): ResponseEntity<ApiResponse<String>> {
-        val response = orderService.cancelTicket(user.name, orderId)
+        val response = orderService.cancelTicket(user.username, orderId)
         return ResponseEntity.ok(ApiResponse.createSuccess(response))
     }
 
@@ -67,8 +67,8 @@ class OrderController(
     @Operation(summary = "주차권 구매 기록 조회 API", description = "주차권 구매 기록을 조회합니다.")
     @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "성공"))
     @GetMapping("/order-history")
-    fun getOrderHistory(@AuthenticationPrincipal user: SecurityProperties.User): ResponseEntity<ApiResponse<List<OrderResponse.GetOrderHistory>>> {
-        val response = orderService.getOrderHistory(user.name)
+    fun getOrderHistory(@AuthenticationPrincipal user: User): ResponseEntity<ApiResponse<List<OrderResponse.GetOrderHistory>>> {
+        val response = orderService.getOrderHistory(user.username)
         return ResponseEntity.ok(ApiResponse.createSuccess(response))
     }
 }

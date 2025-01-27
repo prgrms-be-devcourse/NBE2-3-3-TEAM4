@@ -81,7 +81,7 @@ class OrderService(
             .orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
 
         val ticket = order!!.ticket
-        val parking = ticket!!.parking!!
+        val parking = ticket.parking!!
         val orderDetail = order.orderDetail
 
         // 입차 시간 조회
@@ -104,7 +104,7 @@ class OrderService(
     }
 
     private fun calculateAdditionalPrice(parking: Parking, addPkDuration: Int): Int {
-        val price5Minute = (12.0 * parking.addCharge!! / 5)
+        val price5Minute = (12.0 * parking.addCharge / 5)
         return (addPkDuration / 5 * price5Minute).toInt()
     }
 

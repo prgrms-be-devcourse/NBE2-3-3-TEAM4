@@ -32,7 +32,9 @@ class Order(
     @JoinColumn(name = "order_detail_id")
     val orderDetail: OrderDetail,
 
+    @Column(nullable = true)
     val paymentDate: String? = null,
+    @Column(nullable = true)
     val paymentKey: String? = null
 ) : BaseTime() {
 

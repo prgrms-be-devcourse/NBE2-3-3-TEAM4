@@ -4,6 +4,7 @@ import com.nbe2_3_3_team4.backend.domain.order.entity.Order
 import com.nbe2_3_3_team4.backend.domain.order.entity.OrderDetail
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
+import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus.*
 import java.time.format.DateTimeFormatter
 
 data class OrderResponse(
@@ -68,10 +69,10 @@ data class OrderResponse(
                 val start = order.createdAt!!
                 val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a h시 mm분")
                 val time = start.format(formatter)
-                val status = when (order.orderStatus.toString()) {
-                    "WAITING" -> "주차 대기"
-                    "PARKING" -> "주차중"
-                    "CANCELED" -> "환불"
+                val status = when (order.orderStatus) {
+                    WAITING -> "주차 대기"
+                    PARKING -> "주차중"
+                    CANCELED -> "환불"
                     else -> "주차 완료"
                 }
 
