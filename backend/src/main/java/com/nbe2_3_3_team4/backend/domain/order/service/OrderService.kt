@@ -134,6 +134,7 @@ class OrderService(
             } else {
                 order.updateOrderStatus(OrderStatus.CANCELED)
                 order.updatePaymentStatus(PaymentStatus.COMPLETE)
+                order.orderDetail.updateCancelPrice(order.ticket.price!! / 2)
                 order.ticket.parking!!.parkingStatus!!.decreaseUsedParkingSpace()
                 "구매 후 10분 이상이 경과되어 이용 금액의 50% 환불되었습니다."
             }

@@ -40,8 +40,6 @@ data class OrderResponse(
         }
     }
 
-
-
     data class CreateOrder(
         val orderId: String,
         val ticketId: Long,

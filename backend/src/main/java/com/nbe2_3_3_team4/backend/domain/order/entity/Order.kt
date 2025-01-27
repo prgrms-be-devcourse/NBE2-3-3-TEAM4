@@ -9,7 +9,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "orders")
-class Order(
+open class Order(
     @Id
     @Column(name = "order_id")
     val id: String,

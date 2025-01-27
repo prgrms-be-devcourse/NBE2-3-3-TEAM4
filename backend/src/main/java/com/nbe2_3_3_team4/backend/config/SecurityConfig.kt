@@ -30,7 +30,7 @@ class SecurityConfig (private val jwtAuthenticationEntryPoint: JWTAuthentication
                       private val tokenProvider: TokenProvider) {
 
     val frontUrl = arrayOf("/ttukttak_parking/**")
-    val allowedUrl = arrayOf("/api/kakao/search", "/api/auth/**", "/api/parking/**")
+    val allowedUrl = arrayOf("/api/kakao/search", "/api/auth/**")
 
     @Bean
     @Throws(Exception::class)

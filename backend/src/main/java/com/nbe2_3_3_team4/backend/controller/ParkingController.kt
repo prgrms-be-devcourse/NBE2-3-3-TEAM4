@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -39,5 +41,16 @@ class ParkingController(val parkingService: ParkingService) {
     fun getParkingStatus(@PathVariable parkingId: Long): ResponseEntity<ApiResponse<GetParkingStatus>> {
         return ResponseEntity.ok()
                 .body(ApiResponse.createSuccess(parkingService.getParkingStatus(parkingId)))
+    }
+
+    @Operation(summary = "입차 API", description = "주차장에 차량을 입차합니다.")
+    @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "성공"))
+    @PostMapping("/{carNumber}/enter")
+    fun enterParking(
+            @PathVariable carNumber: String,
+            @AuthenticationPrincipal user: User
+    ): ResponseEntity<ApiResponse<GetEnterParking>> {
+        return ResponseEntity.ok()
+                .body(ApiResponse.createSuccess(parkingService.enterParking(user.username, carNumber)))
     }
 }
