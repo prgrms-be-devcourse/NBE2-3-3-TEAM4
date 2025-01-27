@@ -56,6 +56,11 @@ enum class ErrorCode(// 1. status = 날려줄 상태코드
     CAR_ALREADY_EXISTS(409, -7000, "이미 등록된 차량입니다."),
     CAR_NOT_PRIMARY(400, -7001, "해당 차량은 대표 차량이 아닙니다"),
     CAR_NOT_FOUND(404, -7002, "차량 정보를 찾을 수 없습니다."),
-    CAR_LIMIT_OVER(400, -7003, "등록 가능한 차량 대수는 최대 3대입니다.");
+    CAR_LIMIT_OVER(400, -7003, "등록 가능한 차량 대수는 최대 3대입니다."),
 
+    //-8000: TossPayment
+    INVALID_PAYMENT_AMOUNT(400, -8000, "금액이 일치하지 않습니다."),
+    TOSS_PAYMENT_CONFIRM_REQUEST_ERROR(400, -8001, "토스페이먼츠 결제 승인 통신 오류가 발생했습니다."),
+    INVALID_PAYMENT_RESPONSE_JSON(400, -8002, "결제 승인 응답 값 파싱 오류가 발생했습니다."),
+    TOSS_PAYMENT_CANCEL_REQUEST_ERROR(400, -8003, "토스페이먼츠 결제 취소 통신 오류가 발생했습니다.");
 }

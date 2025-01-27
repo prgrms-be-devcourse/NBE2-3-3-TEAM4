@@ -6,21 +6,16 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "order_details")
-data class OrderDetail(
+class OrderDetail : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,  // 기본값을 null로 설정하여 생성자를 통해 null을 받을 수 있게 함
-    val carNumber: String,
-    @Column(nullable = true)
-    val startParkingTime: LocalDateTime? = null,
-    @Column(nullable = true)
-    val endParkingTime: LocalDateTime? = null,
-    @Column(nullable = true)
-    val cancelPrice: Int? = null,
-    @Column(nullable = true)
-    val addPrice: Int? = null,
-    val totalPrice: Int
-) : BaseTime() {
+    private val id: Long? = null
+
+    private val startParkingTime: LocalDateTime? = null
+    private val endParkingTime: LocalDateTime? = null
+    private val cancelPrice = 0
+    private val addPrice = 0
+    private val totalPrice = 0
 
     companion object {
         fun createOrderDetail(totalPrice: Int, carNumber: String): OrderDetail {

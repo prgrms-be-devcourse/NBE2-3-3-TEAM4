@@ -1,6 +1,7 @@
 package com.nbe2_3_3_team4.backend.global.exception
 
 import com.nbe2_3_3_team4.backend.global.response.ApiResponse
+import jakarta.persistence.EntityNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.NoHandlerFoundException
 import java.io.IOException
 import java.util.stream.Collectors
-import jakarta.persistence.EntityNotFoundException
 
 
 /**
@@ -116,6 +116,22 @@ class GlobalExceptionHandler {
     @ExceptionHandler(JWTCustomException::class)
     fun handleJwtExceptionException(e: JWTCustomException): ResponseEntity<ApiResponse<Any>> {
         logger().error("[JwtExceptionError] message: {}", e.errorCode.message)
+        return ResponseEntity.status(e.errorCode.status)
+                .body(ApiResponse.createError(e.errorCode.message))
+    }
+
+    // TossPayment 결제승인 에러
+    @ExceptionHandler(TossPaymentConfirmException::class)
+    fun handleTossPaymentException(e: TossPaymentConfirmException): ResponseEntity<ApiResponse<Any>> {
+        log.error("[TossPaymentConfirmException] message: {}", e.msg)
+        return ResponseEntity.status(e.statusCode)
+            .body(ApiResponse.createError(e.msg))
+    }
+
+    // TossPayment 에러
+    @ExceptionHandler(TossPaymentException::class)
+    fun handleTossPaymentException(e: TossPaymentException): ResponseEntity<ApiResponse<Any>> {
+        log.error("[TossPaymentException] message: {}", e.message)
         return ResponseEntity.status(e.errorCode.status)
                 .body(ApiResponse.createError(e.errorCode.message))
     }

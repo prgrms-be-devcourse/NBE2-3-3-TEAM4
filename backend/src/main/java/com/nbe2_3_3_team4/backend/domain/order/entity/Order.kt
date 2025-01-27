@@ -1,49 +1,63 @@
 package com.nbe2_3_3_team4.backend.domain.order.entity
 
 import com.nbe2_3_3_team4.backend.domain.member.entity.Member
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus
+
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.global.BaseTime
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "orders")
-class Order(
+open class Order(
+    id:String,
+    status:OrderStatus,
+    paymentStatus:PaymentStatus,
+    paymentDate: LocalDateTime?,
+    paymentKey: String?,
+    ticket: Ticket,
+    member: Member,
+    orderDetail: OrderDetail
+) : BaseTime() {
     @Id
     @Column(name = "order_id")
-    val id: String,
+    val id: String = id
 
     @Enumerated(EnumType.STRING)
-    var orderStatus: OrderStatus = OrderStatus.WAITING,
+    var status: OrderStatus = status
+        private set
 
     @Enumerated(EnumType.STRING)
-    var paymentStatus: PaymentStatus = PaymentStatus.WAITING,
+    var paymentStatus: PaymentStatus = paymentStatus
+        private set
+
+    var paymentDate: LocalDateTime? = null
+        private set
+
+    var paymentKey: String? = null
+        private set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
-    val ticket: Ticket,
+    val ticket: Ticket = ticket
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    val member: Member,
+    val member: Member = member
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE], orphanRemoval = true)
     @JoinColumn(name = "order_detail_id")
-    val orderDetail: OrderDetail,
+    val orderDetail: OrderDetail = orderDetail
 
-    @Column(nullable = true)
-    val paymentDate: String? = null,
-    @Column(nullable = true)
-    val paymentKey: String? = null
-) : BaseTime() {
-
-    fun updatePaymentStatus(paymentStatus: PaymentStatus) {
-        this.paymentStatus = paymentStatus
+    fun updatePaymentStatus(status: PaymentStatus) {
+        this.paymentStatus = status
     }
 
-    fun updateOrderStatus(orderStatus: OrderStatus) {
-        this.orderStatus = orderStatus
+    fun updatePaymentInfo(paymentKey: String, paymentDate: LocalDateTime) {
+        this.paymentKey = paymentKey
+        this.paymentDate = paymentDate
     }
 
     companion object {
