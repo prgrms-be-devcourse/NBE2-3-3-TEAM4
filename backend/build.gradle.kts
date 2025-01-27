@@ -55,6 +55,9 @@ dependencies {
     implementation ("org.json:json:20210307")
 
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf:3.3.6")
+
+    // Kotlin reflection features
+    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.9.10")
 }
 
 
