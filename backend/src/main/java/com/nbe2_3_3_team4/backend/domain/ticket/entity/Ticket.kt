@@ -9,17 +9,17 @@ import jakarta.persistence.*
 class Ticket(parking: Parking?, price: Int?, parkingDuration: Int?) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null
+    val id: Long? = null
 
     @Column(name = "price")
-    private val price : Int? =null
+    val price : Int? =null
 
     @Column(name = "parking_duration")
-    private val parkingDuration : Int? =null
+    val parkingDuration : Int? =null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parking_id")
-    private val parking: Parking? = null
+    val parking: Parking? = null
 
     companion object {
         fun to(parking: Parking?, price: Int, parkingDuration: Int): Ticket {
