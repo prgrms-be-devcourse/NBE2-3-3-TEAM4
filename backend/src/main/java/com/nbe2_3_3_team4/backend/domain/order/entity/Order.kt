@@ -1,6 +1,7 @@
 package com.nbe2_3_3_team4.backend.domain.order.entity
 
 import com.nbe2_3_3_team4.backend.domain.member.entity.Member
+
 import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus
 import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
@@ -57,5 +58,22 @@ open class Order(
     fun updatePaymentInfo(paymentKey: String, paymentDate: LocalDateTime) {
         this.paymentKey = paymentKey
         this.paymentDate = paymentDate
+    }
+
+    companion object {
+        @JvmStatic
+        fun createOrder(
+            id: String,
+            ticket: Ticket,
+            member: Member,
+            orderDetail: OrderDetail
+        ): Order {
+            return Order(
+                id = id,
+                ticket = ticket,
+                member = member,
+                orderDetail = orderDetail
+            )
+        }
     }
 }

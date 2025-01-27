@@ -2,98 +2,70 @@ package com.nbe2_3_3_team4.backend.domain.parking.entity
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
-import com.nbe2_3_3_team4.backend.global.BaseTime
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "parking")
-class Parking() : BaseTime() {
+data class Parking(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "parking_id")
-    val parkingId: Long? = null
-
+    var parkingId: Long? = null,
     @Column(name = "name")
-    var name: String? = null
-
+    var name: String? = null,
     @Column(name = "address")
-    var address: String? = null
-
+    var address: String? = null,
     @Column(name = "latitude")
-    var latitude: Double? = null
-
+    var latitude: Double? = null,
     @Column(name = "longitude")
-    var longitude: Double? = null
-
+    var longitude: Double? = null,
     @Column(name = "we_open_time", length = 4)
-    var weOpenTime: String? = null
-
+    var weOpenTime: String? = null,
     @Column(name = "we_end_time", length = 4)
-    var weEndTime: String? = null
-
+    var weEndTime: String? = null,
+    @Column(name = "wd_open_time", length = 4)
+    var wdOpenTime: String? = null,
+    @Column(name = "wd_end_time", length = 4)
+    var wdEndTime: String? = null,
     @Column(name = "basic_charge")
-    var basicCharge : Int? =null
-
+    var basicCharge: Int = 0,
     @Column(name = "basic_charge_time")
-    var basicChargeTime : Int? =null
-
+    var basicChargeTime: Int = 0,
     @Column(name = "add_charge")
-    var addCharge : Int? =null
-
+    var addCharge: Int = 0,
     @Column(name = "add_charge_time")
-    var addChargeTime : Int? =null
+    var addChargeTime: Int = 0,
 
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "pklt_status_id")
-    var parkingStatus: ParkingStatus? = null
+    var parkingStatus: ParkingStatus? = null,
 
     @OneToMany(mappedBy = "parking", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val tickets: MutableList<Ticket> = ArrayList()
-
-    constructor(name: String?, address: String?, latitude: Double, longitude: Double, weOpenTime: String?, weEndTime: String?, wdOpenTime: String?, wdEndTime: String?, basicCharge: Int, basicChargeTime: Int, addCharge: Int, addChargeTime: Int, parkingStatus: ParkingStatus?) : this() {
-        this.name = name
-        this.address = address
-        this.latitude = latitude
-        this.longitude = longitude
-        this.weOpenTime = weOpenTime
-        this.weEndTime = weEndTime
-        this.basicCharge = basicCharge
-        this.basicChargeTime = basicChargeTime
-        this.addCharge = addCharge
-        this.addChargeTime = addChargeTime
-        this.parkingStatus = parkingStatus
-    }
-
-    fun regTicket(ticket: Ticket) {
-        tickets.add(ticket)
-    }
+    var tickets: MutableList<Ticket> = mutableListOf()
+) {
+    fun regTicket(ticket: Ticket) { tickets.add(ticket) }
 
     companion object {
         @JvmStatic
-		fun to(data: JsonNode, status: ParkingStatus?): Parking {
-            var addCharge = data["add_prk_crg"].asInt()
-            var addChargeTime = data["add_prk_hr"].asInt()
-
-            if (data["add_prk_crg"].asInt() == 0) {
-                addCharge = 220
-                addChargeTime = 5
-            }
+        fun to(data: JsonNode, status: ParkingStatus?): Parking {
+            val addCharge = if (data["add_prk_crg"].asInt() == 0) 220 else data["add_prk_crg"].asInt()
+            val addChargeTime = if (data["add_prk_crg"].asInt() == 0) 5 else data["add_prk_hr"].asInt()
 
             return Parking(
-                    name = data["pklt_nm"].asText(),
-                    address=data["addr"].asText()
-                    ,latitude=data["lat"].asDouble()
-                    ,longitude=data["lot"].asDouble()
-                    ,weOpenTime=data["we_oper_bgng_tm"].asText()
-                    ,weEndTime=data["we_oper_end_tm"].asText()
-                    ,wdOpenTime=data["wd_oper_bgng_tm"].asText()
-                    ,wdEndTime=data["wd_oper_end_tm"].asText()
-                    ,basicCharge=data["bsc_prk_crg"].asInt()
-                    ,basicChargeTime=data["bsc_prk_hr"].asInt()
-                    ,addCharge=addCharge
-                    ,addChargeTime=addChargeTime
-                    ,parkingStatus=status)
+                name = data["pklt_nm"].asText(),
+                address = data["addr"].asText(),
+                latitude = data["lat"].asDouble(),
+                longitude = data["lot"].asDouble(),
+                weOpenTime = data["we_oper_bgng_tm"].asText(),
+                weEndTime = data["we_oper_end_tm"].asText(),
+                wdOpenTime = data["wd_oper_bgng_tm"].asText(),
+                wdEndTime = data["wd_oper_end_tm"].asText(),
+                basicCharge = data["bsc_prk_crg"].asInt(),
+                basicChargeTime = data["bsc_prk_hr"].asInt(),
+                addCharge = addCharge,
+                addChargeTime = addChargeTime,
+                parkingStatus = status,
+            )
         }
     }
-
 }

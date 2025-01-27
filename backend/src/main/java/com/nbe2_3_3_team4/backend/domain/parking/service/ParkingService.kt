@@ -1,8 +1,14 @@
 package com.nbe2_3_3_team4.backend.domain.parking.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParking
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParkingStatus
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetNearbyParking
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetNearbyParking.Companion.from
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParking.Companion.from
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParkingStatus.Companion.from
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
+import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking.Companion.to
 import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
 import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingRepository
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
@@ -11,128 +17,74 @@ import com.nbe2_3_3_team4.backend.global.exception.NotFoundException
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.io.IOException
-import java.util.function.Function
-import java.util.function.Predicate
-import java.util.function.Supplier
-import java.util.function.ToDoubleFunction
 import kotlin.math.cos
 
+const val KM = 0.5
+const val latKm = KM / 111
+const val defaultCharge = 200
+const val defaultChargeTime = 5
+val lowCongestion = 0.0..30.0 // 혼잡도 범위 여유
+val mediumCongestion = 30.0..70.0 // 혼잡도 범위 보통
+
 @Service
-class ParkingService(val parkingRepository: ParkingRepository) {
+class ParkingService( private val parkingRepository: ParkingRepository ) {
 
-
-    @Transactional(readOnly = true)
-    fun getParking(parkingId: Long): ParkingResponse.GetParking {
-        val parking: Parking = parkingRepository.findById(parkingId).orElse(null) ?: throw NotFoundException(ErrorCode.PKLT_NOT_FOUND)
-
-        return ParkingResponse.GetParking.from(parking)
-    }
+    @get:Transactional(readOnly = true)
+    val parkingList: List<Parking?> get() = parkingRepository.findAll().filterNotNull() // 주차장 목록 조회
 
     @Transactional(readOnly = true)
-    fun getParkingStatus(parkingId: Long): ParkingResponse.GetParkingStatus {
-        val parking: Parking = parkingRepository.findById(parkingId).orElse(null) ?: throw NotFoundException(ErrorCode.PKLT_NOT_FOUND)
+    fun getParking(parkingId: Long): GetParking = from( parkingRepository.findById(parkingId) // 주차장 조회
+            .orElseThrow { NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!! ) // 예외 처리
 
-        return ParkingResponse.GetParkingStatus.from(parking.parkingStatus!!)
+    @Transactional(readOnly = true)
+    fun getParkingStatus(parkingId: Long): GetParkingStatus = from( parkingRepository.findById(parkingId) // 주차장 상태 조회
+            .orElseThrow { NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!!.parkingStatus!! ) // 예외 처리
+
+    @Transactional(readOnly = true)
+    fun getNearbyParking(lat: Double, lng: Double): List<GetNearbyParking> = calculateCongestionAndSort(filterNearbyParking(parkingList, lat, lng)) // 주변 주차장 조회
+
+    private fun filterNearbyParking(parkingList: List<Parking?>, latitude: Double, longitude: Double): List<Parking?> {
+        val lngDifference = latKm / (cos(latitude)) // 경도 차이 계산
+
+        return parkingList.filterNotNull().filter {
+                    it.latitude != null && it.longitude != null &&
+                    it.latitude!! in (latitude - latKm)..(latitude + latKm) &&
+                    it.longitude!! in (longitude - lngDifference)..(longitude + lngDifference) } // 주변 주차장 필터링
     }
 
-    fun getNearbyParking(lat: Double, lng: Double): List<ParkingResponse.GetNearbyParking> {
-        val parkingList: MutableList<Parking> = parkingList()
-        val nearbyParkingList: MutableList<Parking> = filterNearbyParking(parkingList, lat, lng)
-        return calculateCongestionAndSort(nearbyParkingList)
+    private fun calculateCongestionAndSort(parkingList: List<Parking?>): List<GetNearbyParking> {
+        return parkingList.filterNotNull()
+            .sortedBy { it.parkingStatus?.getCongestionRate() ?: 0.0 } // 주차장 혼잡도에 따라 정렬
+            .map { from(it, it.parkingStatus?.let { status ->
+                        when (status.getCongestionRate()) {
+                            in lowCongestion -> "여유"
+                            in mediumCongestion -> "보통"
+                            else -> "혼잡"
+                        } } ?: "정보 없음") } // 주차장 혼잡도를 3단계로 나누어 반환
     }
 
-    fun parkingList() : MutableList<Parking> {
-         return parkingRepository.findAll() as MutableList<Parking>
-    }
-
-
-    fun filterNearbyParking(parkingList: MutableList<Parking>, latitude: Double, longitude: Double): MutableList<Parking> {
-        val KM = 0.5
-        val lngDifference = KM / 111 / (cos(latitude))
-
-        val latFilter: Predicate<Parking> = Predicate<Parking> { parking: Parking ->
-            (parking.latitude!! > latitude - (KM / 111)
-                    && latitude + (KM / 111) > parking.latitude!!)
-        }
-        val lngFilter: Predicate<Parking> = Predicate<Parking> { parking: Parking ->
-            (parking.longitude!! > longitude - lngDifference
-                    && parking.longitude!! < longitude + lngDifference)
-        }
-
-        return parkingList.stream()
-                .filter(latFilter.and(lngFilter))
-                .toList()
-    }
-
-    private fun calculateCongestionAndSort(parkingList: List<Parking>): List<ParkingResponse.GetNearbyParking> {
-        return parkingList.stream().sorted(
-                Comparator.comparingDouble { pklt: Parking ->
-                    val status: ParkingStatus? = pklt.parkingStatus
-                    ((status?.usedParkingSpace ?: 1) / (status?.totalParkingSpace ?: 1) * 100).toDouble()
-                })
-                .map { pklt: Parking ->
-                    val status: ParkingStatus? = pklt.parkingStatus
-                    val percentage: Double = (status?.usedParkingSpace?.toDouble()
-                            ?: 1.0) / status?.totalParkingSpace!! * 100
-                    val congestionStatus = if (percentage <= 30) {
-                        "여유"
-                    } else if (percentage <= 70) {
-                        "보통"
-                    } else {
-                        "혼잡"
-                    }
-                    ParkingResponse.GetNearbyParking.from(pklt, congestionStatus)
-                }.toList()
-    }
+    private fun ParkingStatus.getCongestionRate(): Double = usedParkingSpace.toDouble() / totalParkingSpace * 100
 
     @Transactional
-    @Throws(IOException::class)
-    fun loadDefaultDataByJson(){
+    fun loadDefaultDataByJson() {
         val objectMapper = ObjectMapper()
-        
+        val dataArray = objectMapper.readTree(ClassPathResource("static/data.json").file)["DATA"]
 
-        val root = objectMapper.readTree(ClassPathResource("static/data.json").file)
-        val dataArray = root["DATA"]
-
-
-        for (data in dataArray) {
-            val parkingName = data["pklt_nm"].asText()
-
-            val parking: Parking? = parkingRepository.findByName(parkingName)
-
-            if (parking == null) {
-                parkingRepository.save(Parking.to(data, ParkingStatus.to(data)))
-            } else {
-                parking.parkingStatus?.modifyTotalParkingSpaceOfJson()
-            }
-        }
+        dataArray.forEach { data ->
+            parkingRepository.findByName(data["pklt_nm"].asText())?.let { // 이미 존재하는 주차장인 경우
+                it.parkingStatus?.ModifyTotalParkingSpaceOfJson() // 주차장의 총 주차면수 증가
+            } ?: run { parkingRepository.save(to(data, ParkingStatus.to(data))) } } // 새로운 주차장인 경우 저장
     }
 
     @Transactional
-    fun loadDefaultTickets(): Unit {
-        val parkingList: MutableList<Parking?> = parkingRepository.findAll()
-        val nums = intArrayOf(1, 2, 4, 6, 12)
+    fun loadDefaultTickets() {
+        parkingList.forEach { parking ->
+            val basicCharge = parking?.basicCharge?.takeIf { it != 0 } ?: defaultCharge // 기본 요금 200원
+            val basicChargeTime = parking?.basicChargeTime?.takeIf { it != 0 } ?: defaultChargeTime // 기본 요금 시간 5분
 
-        for (parking in parkingList) {
-            // 1시간 2시간 4시간 6시간 12시간
-            // bsc_prk_crg => 기본 요금
-            // bsc_prk_hr => 분단위
-
-            for (num in nums) {
-                var basicCharge: Int? = parking?.basicCharge
-                var basicChargeTime: Int? = parking?.basicChargeTime
-
-                if (basicCharge == 0) {
-                    basicCharge = 220
-                    basicChargeTime = 5
-                }
-
-                val result = ((basicCharge?.div(basicChargeTime!!))?.times(60) ?: 1) * num
-
+            intArrayOf(1, 2, 4, 6, 12).forEach { num -> // 1, 2, 4, 6, 12시간 주차권 생성
+                val result = (basicCharge / basicChargeTime) * 60 * num
                 parking?.regTicket(Ticket.to(parking, result, num))
-            }
-        }
-
+            } }
     }
 }

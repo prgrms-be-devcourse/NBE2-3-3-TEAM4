@@ -4,7 +4,6 @@ import com.nbe2_3_3_team4.backend.global.BaseTime
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
-
 @Entity
 @Table(name = "order_details")
 class OrderDetail : BaseTime() {
@@ -17,4 +16,10 @@ class OrderDetail : BaseTime() {
     private val cancelPrice = 0
     private val addPrice = 0
     private val totalPrice = 0
+
+    companion object {
+        fun createOrderDetail(totalPrice: Int, carNumber: String): OrderDetail {
+            return OrderDetail(totalPrice = totalPrice, carNumber = carNumber)
+        }
+    }
 }

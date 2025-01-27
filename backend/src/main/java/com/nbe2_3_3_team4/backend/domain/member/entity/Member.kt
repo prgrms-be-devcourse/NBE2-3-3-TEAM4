@@ -14,7 +14,7 @@ class Member() : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
-    private var id: Long? = null
+    var id: Long? = null
 
     @Column(name = "name")
     var name: String? = null
