@@ -6,6 +6,7 @@ import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.global.BaseTime
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "orders")
@@ -33,9 +34,9 @@ open class Order(
     val orderDetail: OrderDetail,
 
     @Column(nullable = true)
-    val paymentDate: String? = null,
+    var paymentDate: LocalDateTime? = null,
     @Column(nullable = true)
-    val paymentKey: String? = null
+    var paymentKey: String? = null
 ) : BaseTime() {
 
     fun updatePaymentStatus(paymentStatus: PaymentStatus) {
@@ -46,8 +47,12 @@ open class Order(
         this.orderStatus = orderStatus
     }
 
+    fun updatePaymentInfo(paymentKey: String, paymentDate: LocalDateTime) {
+        this.paymentKey = paymentKey
+        this.paymentDate = paymentDate
+    }
+
     companion object {
-        @JvmStatic
         fun createOrder(
             id: String,
             ticket: Ticket,

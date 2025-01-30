@@ -120,6 +120,22 @@ class GlobalExceptionHandler {
                 .body(ApiResponse.createError(e.errorCode.message))
     }
 
+    // TossPayment 결제승인 에러
+    @ExceptionHandler(TossPaymentConfirmException::class)
+    fun handleTossPaymentException(e: TossPaymentConfirmException): ResponseEntity<ApiResponse<Any>> {
+        log.error("[TossPaymentConfirmException] message: {}", e.msg)
+        return ResponseEntity.status(e.statusCode)
+            .body(ApiResponse.createError(e.msg))
+    }
+
+    // TossPayment 에러
+    @ExceptionHandler(TossPaymentException::class)
+    fun handleTossPaymentException(e: TossPaymentException): ResponseEntity<ApiResponse<Any>> {
+        log.error("[TossPaymentException] message: {}", e.message)
+        return ResponseEntity.status(e.errorCode.status)
+                .body(ApiResponse.createError(e.errorCode.message))
+    }
+
     // 위의 경우를 제외한 모든 에러 500
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ApiResponse<Any>> {
