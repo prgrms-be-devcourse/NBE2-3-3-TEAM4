@@ -31,9 +31,8 @@ class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateException::class)
     fun handleDuplicateAccountException(e: DuplicateException): ResponseEntity<ApiResponse<Any>> {
         logger().error("[DuplicateAccountException] message: {}", e.message)
-        val errorCode = ErrorCode.USER_ALREADY_EXIST
-        return ResponseEntity.status(errorCode.status)
-                .body(ApiResponse.createError(errorCode.message))
+        return ResponseEntity.status(e.errorCode.status)
+                .body(ApiResponse.createError(e.errorCode.message))
     }
 
 

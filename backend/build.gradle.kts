@@ -3,9 +3,18 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "3.3.6"
     id("io.spring.dependency-management") version "1.1.6"
+
     kotlin("jvm") version "2.0.0"
     kotlin("plugin.spring") version "2.0.0"
     kotlin("plugin.jpa") version "2.0.0"
+    kotlin("plugin.noarg") version "2.0.0"
+    kotlin("plugin.allopen") version "2.0.0"
+}
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -67,6 +76,7 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "17"
     }
 }
+
 
 tasks.withType<Test> {
     useJUnitPlatform()

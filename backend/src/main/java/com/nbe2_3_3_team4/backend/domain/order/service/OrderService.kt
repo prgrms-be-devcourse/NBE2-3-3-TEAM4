@@ -1,19 +1,21 @@
 package com.nbe2_3_3_team4.backend.domain.order.service
 
+
 import com.nbe2_3_3_team4.backend.domain.car.repository.CarRepository
 import com.nbe2_3_3_team4.backend.domain.member.repository.MemberRepository
 import com.nbe2_3_3_team4.backend.domain.order.dto.OrderRequest
 import com.nbe2_3_3_team4.backend.domain.order.dto.OrderResponse
 import com.nbe2_3_3_team4.backend.domain.order.entity.Order
 import com.nbe2_3_3_team4.backend.domain.order.entity.OrderDetail
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderDetailRepository
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderRepository
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
 import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
 import com.nbe2_3_3_team4.backend.domain.ticket.repository.TicketRepository
 import com.nbe2_3_3_team4.backend.global.exception.BadRequestException
+import com.nbe2_3_3_team4.backend.global.exception.DuplicateException
 import com.nbe2_3_3_team4.backend.global.exception.ErrorCode
 import com.nbe2_3_3_team4.backend.global.exception.NotFoundException
 import jakarta.transaction.Transactional
@@ -43,6 +45,10 @@ class OrderService(
         // 해당 주차권 조회
         val ticket = ticketRepository.findById(request.ticketId)
             .orElseThrow { NotFoundException(ErrorCode.TICKET_NOT_FOUND) }
+
+        if(orderDetailRepository.existsByCarNumber(request.carNumber)) {
+            throw DuplicateException(ErrorCode.PKLT_ALREADY_PARKED)
+        }
 
         // 주차장 조회
         val parking = ticket!!.parking
@@ -76,6 +82,13 @@ class OrderService(
         return (totalParkingSpace - usedParkingSpace) > 0
     }
 
+    fun getOrderForPayment(orderId: String) : OrderResponse.getOrderForPayment {
+        val order = orderRepository.findById(orderId)
+            .orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
+
+        return OrderResponse.getOrderForPayment.from(order.ticket.parkingDuration, order.ticket.price)
+    }
+
     fun getOrder(orderId: String): OrderResponse {
         val order = orderRepository.findById(orderId)
             .orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
@@ -85,8 +98,7 @@ class OrderService(
         val orderDetail = order.orderDetail
 
         // 입차 시간 조회
-        val startParkingTime = orderDetail.startParkingTime
-            ?: throw BadRequestException(ErrorCode.NOT_PARKED)
+        val startParkingTime = orderDetail.startParkingTime ?: throw BadRequestException(ErrorCode.NOT_PARKED)
 
         // 출차 시간 조회
         val endTime = orderDetail.endParkingTime ?: LocalDateTime.now()
@@ -110,7 +122,7 @@ class OrderService(
 
     fun completePay(payId: String): String {
         val order = orderRepository.findByPaymentKey(payId)
-            //.orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
+        //.orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
             ?: throw NotFoundException(ErrorCode.ORDER_NOT_FOUND)
 
         order.updatePaymentStatus(PaymentStatus.COMPLETE)
@@ -146,6 +158,17 @@ class OrderService(
     fun deleteOrder(id: String): Void? {
         val order = orderRepository.findByPaymentKey(id)
             ?: throw NotFoundException(ErrorCode.ORDER_NOT_FOUND)
+
+        val parkingStatus = order.ticket.parking!!.parkingStatus
+        parkingStatus!!.decreaseUsedParkingSpace()
+
+        orderRepository.delete(order)
+        return null
+    }
+
+    fun deleteOrderById(orderId: String): Void? {
+        val order = orderRepository.findById(orderId)
+        .orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
 
         val parkingStatus = order.ticket.parking!!.parkingStatus
         parkingStatus!!.decreaseUsedParkingSpace()

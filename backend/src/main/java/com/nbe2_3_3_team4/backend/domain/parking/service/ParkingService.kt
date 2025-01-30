@@ -1,6 +1,7 @@
 package com.nbe2_3_3_team4.backend.domain.parking.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParking
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParkingStatus
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetNearbyParking
@@ -72,7 +73,7 @@ class ParkingService( private val parkingRepository: ParkingRepository ) {
 
         dataArray.forEach { data ->
             parkingRepository.findByName(data["pklt_nm"].asText())?.let { // 이미 존재하는 주차장인 경우
-                it.parkingStatus?.ModifyTotalParkingSpaceOfJson() // 주차장의 총 주차면수 증가
+                it.parkingStatus?.modifyTotalParkingSpaceOfJson() // 주차장의 총 주차면수 증가
             } ?: run { parkingRepository.save(to(data, ParkingStatus.to(data))) } } // 새로운 주차장인 경우 저장
     }
 
@@ -86,5 +87,21 @@ class ParkingService( private val parkingRepository: ParkingRepository ) {
                 val result = (basicCharge / basicChargeTime) * 60 * num
                 parking?.regTicket(Ticket.to(parking, result, num))
             } }
+    }
+
+    @Transactional
+    fun getTicketsByParking(parkingId: Long) : List<ParkingResponse.GetTicketByParking>{
+        val parking: Parking =
+            parkingRepository.findById(parkingId)
+                .orElseThrow{ NotFoundException(ErrorCode.PKLT_NOT_FOUND) }!!
+
+        val tickets: MutableList<Ticket> = parking.tickets
+
+        val response: MutableList<ParkingResponse.GetTicketByParking> = ArrayList()
+        for (ticket in tickets) {
+            response.add(ParkingResponse.GetTicketByParking.from(ticket))
+        }
+
+        return response
     }
 }
