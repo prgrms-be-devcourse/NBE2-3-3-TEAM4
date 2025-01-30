@@ -1,9 +1,8 @@
 package com.nbe2_3_3_team4.backend.domain.order.entity
 
 import com.nbe2_3_3_team4.backend.domain.member.entity.Member
-
-import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus
-import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.global.BaseTime
 import jakarta.persistence.*
@@ -12,47 +11,40 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "orders")
 open class Order(
-    id:String,
-    status:OrderStatus,
-    paymentStatus:PaymentStatus,
-    paymentDate: LocalDateTime?,
-    paymentKey: String?,
-    ticket: Ticket,
-    member: Member,
-    orderDetail: OrderDetail
-) : BaseTime() {
     @Id
     @Column(name = "order_id")
-    val id: String = id
+    val id: String,
 
     @Enumerated(EnumType.STRING)
-    var status: OrderStatus = status
-        private set
+    var orderStatus: OrderStatus = OrderStatus.WAITING,
 
     @Enumerated(EnumType.STRING)
-    var paymentStatus: PaymentStatus = paymentStatus
-        private set
-
-    var paymentDate: LocalDateTime? = null
-        private set
-
-    var paymentKey: String? = null
-        private set
+    var paymentStatus: PaymentStatus = PaymentStatus.WAITING,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
-    val ticket: Ticket = ticket
+    val ticket: Ticket,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    val member: Member = member
+    val member: Member,
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE], orphanRemoval = true)
     @JoinColumn(name = "order_detail_id")
-    val orderDetail: OrderDetail = orderDetail
+    val orderDetail: OrderDetail,
 
-    fun updatePaymentStatus(status: PaymentStatus) {
-        this.paymentStatus = status
+    @Column(nullable = true)
+    var paymentDate: LocalDateTime? = null,
+    @Column(nullable = true)
+    var paymentKey: String? = null
+) : BaseTime() {
+
+    fun updatePaymentStatus(paymentStatus: PaymentStatus) {
+        this.paymentStatus = paymentStatus
+    }
+
+    fun updateOrderStatus(orderStatus: OrderStatus) {
+        this.orderStatus = orderStatus
     }
 
     fun updatePaymentInfo(paymentKey: String, paymentDate: LocalDateTime) {
@@ -61,7 +53,6 @@ open class Order(
     }
 
     companion object {
-        @JvmStatic
         fun createOrder(
             id: String,
             ticket: Ticket,

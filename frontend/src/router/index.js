@@ -48,6 +48,16 @@ const router = createRouter({
       name: 'search',
       component: () => import('../views/SearchPage.vue'),
     },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: () => import('../views/CheckoutPage.vue'),
+    },
+    {
+      path: '/checkout-success',
+      name: 'checkout-success',
+      component: () => import('../views/CheckoutSuccessPage.vue'),
+    }
   ],
 })
 

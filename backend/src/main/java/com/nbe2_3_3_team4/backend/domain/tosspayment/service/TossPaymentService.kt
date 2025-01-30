@@ -1,7 +1,7 @@
 package com.nbe2_3_3_team4.backend.domain.tosspayment.service
 
 import com.nbe2_3_3_team4.backend.domain.order.entity.Order
-import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderRepository
 import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
 import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingStatusRepository
@@ -28,12 +28,11 @@ import java.util.*
 class TossPaymentService(
     val orderRepository: OrderRepository,
     val parkingStatusRepository: ParkingStatusRepository,
-    @Value("\${TOSS_PAYMENT_SECRET_KEY}")
-    private val secretKey: String
+
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(TossPaymentService::class.java)
-
+    private val secretKey: String = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6"
     /**
      * 결제 전 금액 세션에 저장 메서드
      *

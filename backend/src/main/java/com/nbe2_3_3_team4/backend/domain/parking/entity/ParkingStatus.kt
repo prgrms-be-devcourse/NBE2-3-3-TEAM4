@@ -24,10 +24,6 @@ data class ParkingStatus (
         this.usedParkingSpace -= 1
     }
 
-    fun decreaseUsedParkingSpace() {
-        this.usedParkingSpace -= 1
-    }
-
     companion object {
 		fun to(data: JsonNode): ParkingStatus {
             return ParkingStatus ( null, data["tpkct"].asInt(), data["now_prk_vhcl_cnt"].asInt(), LocalDateTime.now() )
