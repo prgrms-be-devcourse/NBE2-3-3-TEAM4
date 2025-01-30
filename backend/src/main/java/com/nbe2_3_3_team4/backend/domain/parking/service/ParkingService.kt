@@ -1,10 +1,9 @@
 package com.nbe2_3_3_team4.backend.domain.parking.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nbe2_3_3_team4.backend.domain.member.repository.MemberRepository
-import com.nbe2_3_3_team4.backend.domain.order.repository.OrderDetailRepository
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderRepository
 import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus.*
+import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus.COMPLETE
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParking
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParkingStatus
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetNearbyParking
@@ -12,7 +11,9 @@ import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetEnterPar
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetNearbyParking.Companion.from
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParking.Companion.from
 import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetParkingStatus.Companion.from
-import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetEnterParking.Companion.from
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetEnterParking.Companion.from as fromEnter
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetExitParking.Companion.from as fromExit
+import com.nbe2_3_3_team4.backend.domain.parking.dto.ParkingResponse.GetExitParking
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking.Companion.to
 import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
@@ -24,6 +25,8 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
+import java.time.LocalDateTime
+import kotlin.math.ceil
 import kotlin.math.cos
 
 const val KM = 0.5
@@ -36,9 +39,7 @@ val mediumCongestion = 30.0..70.0 // 혼잡도 범위 보통
 @Service
 class ParkingService(
     private val parkingRepository: ParkingRepository,
-    private val memberRepository: MemberRepository,
     private val orderRepository: OrderRepository,
-    private val orderDetailRepository: OrderDetailRepository,
 ) {
 
     // 주차장 목록 조회
@@ -85,34 +86,42 @@ class ParkingService(
     private fun ParkingStatus.getCongestionRate(): Double = usedParkingSpace.toDouble() / totalParkingSpace * 100
 
     @Transactional
-    fun enterParking(email: String, carNumber: String): GetEnterParking {
-        val member = memberRepository.findByEmail(email).orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
-        val order = orderRepository.findAllByMemberAndOrderStatusAndOrderDetail_CarNumber(member, WAITING, carNumber).orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }[0]
+    fun enterParking(carNumber: String): GetEnterParking {
+        val order = orderRepository.findByOrderStatusAndOrderDetailCarNumber(WAITING, carNumber).orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
         val orderDetail = order.orderDetail
+
+        if (order.paymentStatus != COMPLETE) throw NotFoundException(ErrorCode.NOT_PAID) // 결제가 완료되지 않은 경우
 
         // 입차 상태 업데이트
         order.updateOrderStatus(PARKING)
+        orderRepository.flush()
         orderDetail.updateStartParkingTime(order.updatedAt!!)
+        orderDetail.updateTotalPrice(order.ticket.price!!)
 
-        return from(order)
+        return fromEnter(order)
     }
 
     @Transactional
-    fun exitParking(email: String, carNumber: String) {
-        val member = memberRepository.findByEmail(email).orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
-        val order = orderRepository.findAllByMemberAndOrderStatusAndOrderDetail_CarNumber(member, PARKING, carNumber).orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }[0]
+    fun exitParking(carNumber: String): GetExitParking {
+        val order = orderRepository.findByOrderStatusAndOrderDetailCarNumber(PARKING, carNumber).orElseThrow { NotFoundException(ErrorCode.NOT_PARKED) }
         val orderDetail = order.orderDetail
 
         // 출차 상태 업데이트
-        order.updateOrderStatus(EXIT)
+        order.updateOrderStatus(FINISHED)
+        orderRepository.flush()
         orderDetail.updateEndParkingTime(order.updatedAt!!)
 
         // 주차 요금 계산
-        val parkingTime = Duration.between(orderDetail.startParkingTime, orderDetail.endParkingTime).toMinutes()
-        val ticket = order.ticket
+        val expiredTime = order.createdAt?.plusHours(order.ticket.parkingDuration!!.toLong())?.plusMinutes(10)
+        val parkingTime = Duration.between(expiredTime, orderDetail.endParkingTime!!).toSeconds()
+        val addPrice = order.ticket.parking?.let { if (parkingTime > 0) it.addCharge * ceil(parkingTime.toInt() / (it.addChargeTime * 60.0)).toInt() else 0 }
+
+        orderDetail.updateAddPrice(addPrice!!)
+        orderDetail.updateTotalPrice(orderDetail.totalPrice + addPrice)
 
         // 주차 현황 주차 차량수 감소
         order.ticket.parking?.parkingStatus?.updateUsedParkingSpace()
+        return fromExit(order)
     }
 
     // Default Parking Lot Data Load

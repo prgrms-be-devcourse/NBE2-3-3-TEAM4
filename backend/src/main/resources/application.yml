@@ -21,6 +21,10 @@ spring:
   graphql:
     cors:
       allowed-origins: ${FRONTEND_URL}
+  task:
+    scheduling:
+      pool:
+        size: 5
 springdoc:
   use-fqn: true
   swagger-ui:

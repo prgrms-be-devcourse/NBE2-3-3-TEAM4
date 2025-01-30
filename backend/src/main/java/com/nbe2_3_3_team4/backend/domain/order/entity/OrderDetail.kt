@@ -19,7 +19,7 @@ open class OrderDetail(
     var cancelPrice: Int? = null,
     @Column(nullable = true)
     var addPrice: Int? = null,
-    var totalPrice: Int
+    var totalPrice: Int = 0
 ) : BaseTime() {
 
     fun updateStartParkingTime(startParkingTime: LocalDateTime) { this.startParkingTime = startParkingTime }
@@ -29,8 +29,8 @@ open class OrderDetail(
     fun updateTotalPrice(totalPrice: Int) { this.totalPrice = totalPrice }
 
     companion object {
-        fun createOrderDetail(totalPrice: Int, carNumber: String): OrderDetail {
-            return OrderDetail(totalPrice = totalPrice, carNumber = carNumber)
+        fun createOrderDetail(carNumber: String): OrderDetail {
+            return OrderDetail(carNumber = carNumber)
         }
     }
 }

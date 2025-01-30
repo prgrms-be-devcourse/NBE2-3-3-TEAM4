@@ -52,7 +52,15 @@ class OrderService(
         val newOrderId = getRandomOrderId()
 
         val newOrder = if (isAvailable(parkingStatus!!)) {
-            val orderDetail = OrderDetail.createOrderDetail(ticket.price!!, request.carNumber)
+            orderRepository.findAllByOrderStatusInAndOrderDetailCarNumber(listOf(OrderStatus.WAITING, OrderStatus.PARKING), request.carNumber).forEach {
+                when (it.orderStatus) {
+                    OrderStatus.WAITING -> throw BadRequestException(ErrorCode.ALREADY_ORDERED)
+                    OrderStatus.PARKING -> throw BadRequestException(ErrorCode.PARKING_IN_PROGRESS)
+                    else -> {}
+                }
+            }
+
+            val orderDetail = OrderDetail.createOrderDetail(request.carNumber)
             orderDetailRepository.save(orderDetail)
 
             val order = Order.createOrder(newOrderId, ticket, member, orderDetail)
@@ -129,12 +137,14 @@ class OrderService(
             val refundMessage = if (order.createdAt!!.plusMinutes(10).isAfter(LocalDateTime.now())) {
                 order.updateOrderStatus(OrderStatus.CANCELED)
                 order.updatePaymentStatus(PaymentStatus.COMPLETE)
+                with(order.orderDetail) { updateCancelPrice(0); updateTotalPrice(0) } // 취소 수수료 계산
                 order.ticket.parking!!.parkingStatus!!.decreaseUsedParkingSpace()
                 "전액 환불되었습니다."
             } else {
                 order.updateOrderStatus(OrderStatus.CANCELED)
                 order.updatePaymentStatus(PaymentStatus.COMPLETE)
                 order.orderDetail.updateCancelPrice(order.ticket.price!! / 2)
+                with(order.orderDetail) { order.ticket.price.let{updateCancelPrice(it/2); updateTotalPrice(it/2)} } // 취소 수수료 계산
                 order.ticket.parking!!.parkingStatus!!.decreaseUsedParkingSpace()
                 "구매 후 10분 이상이 경과되어 이용 금액의 50% 환불되었습니다."
             }
