@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue';
 
-  const emit = defineEmits(['back']);
+  const emit = defineEmits(['back', 'search', 'click']);
 
   const goBack = () => {
     emit('back');
@@ -15,6 +15,9 @@
     }
   }
 
+  const handleClick = () => {
+    emit('click');
+  }
 </script>
 
 <template>
@@ -28,6 +31,7 @@
         placeholder="목적지를 검색하세요"
         v-model="keyword"
         @keyup.enter="handleSearch"
+        @click="handleClick"
       >
       </div>
   </div>

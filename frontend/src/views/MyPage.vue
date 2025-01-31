@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import NavBarNonMy from '../components/NavBar-nonMy.vue';
 import InputBarNon from '../components/InputBar-non.vue';
 const router = useRouter();
+import { usePlaceStore } from '../stores/place';
 
 const member = ref({});
 const getMember = async () => {
@@ -15,7 +16,7 @@ const getMember = async () => {
     router.push('/login');
   }
 };
-
+const placeStore = usePlaceStore();
 const primaryCar = ref(null);
 
 const getCars = async () => {
@@ -26,8 +27,8 @@ const getCars = async () => {
     primaryCar.value = "없음";
   }
 };
-
 const goBack = () => {
+  placeStore.setSelectedPlace(null);
   router.push('/');
 };
 

@@ -33,7 +33,7 @@ const handleLogin = async () => {
 };
 
 const goBack = () => {
-  router.push('/')
+  router.back();
 };
 
 </script>

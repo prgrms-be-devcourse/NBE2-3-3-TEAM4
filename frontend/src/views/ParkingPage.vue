@@ -28,11 +28,31 @@ const getParkingStatus = async () => {
   parkingStatus.value = response.data.data;
 }
 
+const tickets = ref(null);
+const getTickets = async () => {
+  const response = await axios.get(`/api/parking/${id}/tickets`);
+  tickets.value = response.data.data;
+}
+
+const selectedTicket = ref(null);
+
+const selectTicket = (ticket) => {
+  selectedTicket.value = selectedTicket.value === ticket ? null : ticket;
+}
 
 onMounted(async () => {
   await getParking();
   await getParkingStatus();
+  await getTickets();
 });
+
+const handlePayment = () => {
+  if (selectedTicket.value) {
+    router.push(`/parking/${id}/payment/${selectedTicket.value.ticketId}`);
+  } else {
+    alert('주차권을 선택해주세요.');
+  }
+}
 
 </script>
 
@@ -92,23 +112,69 @@ onMounted(async () => {
     </div>
 
     <div class="parking-detail-card">
-
         <h3 class="section-title">주차권 정보</h3>
-
+        <div v-if="tickets && tickets.length > 0" class="tickets-container">
+            <div
+                v-for="ticket in tickets"
+                :key="ticket.ticketId"
+                class="ticket-item"
+                :class="{ 'ticket-selected': selectedTicket === ticket }"
+                @click="selectTicket(ticket)"
+            >
+                <div class="ticket-header">
+                    <span class="ticket-type">{{ ticket.type }}</span>
+                </div>
+                <div class="ticket-details">
+                    <div class="ticket-detail-item">
+                        <span class="detail-value">{{ ticket.pkDuration }}시간 주차권</span>
+                        <span class="detail-price">{{ ticket.price.toLocaleString() }}원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-else class="no-tickets">
+            등록된 주차권이 없습니다.
+        </div>
     </div>
+  </div>
+  <div class="bottom-button-container">
+    <button class="payment-button" @click="handlePayment">결제하기</button>
   </div>
 </template>
 
 <style scoped>
+.bottom-button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 23px 24px;
+  background: white;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
 .parking-detail-container {
   background-color: #f5f7fa;
   min-height: calc(100vh - 120px);
   margin-top: 120px;
+  padding-bottom: 90px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.parking-detail-container::-webkit-scrollbar {
+  display: none;
 }
 
 .parking-detail-card {
   background: white;
-  padding: 20px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.parking-detail-card:last-child {
+  margin-bottom: 0;
 }
 
 .section-title {
@@ -219,5 +285,95 @@ onMounted(async () => {
   gap: 4px;
   color: #334155;
   font-size: 0.875rem;
+}
+
+.tickets-container {
+    display: grid;
+    gap: 16px;
+}
+
+.ticket-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.ticket-item:hover {
+    border-color: #5C7CFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-selected {
+    border-color: #5C7CFF;
+    background-color: #F5F7FF;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.ticket-type {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #5C7CFF;
+}
+
+.ticket-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ticket-detail-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-value {
+    font-size: 0.875rem;
+    color: #334155;
+    font-weight: 500;
+}
+
+.detail-price {
+    font-size: 0.875rem;
+    color: #334155;
+    font-weight: 700;
+}
+
+.no-tickets {
+    text-align: center;
+    color: #64748b;
+    padding: 24px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+}
+
+.payment-button {
+  width: 100%;
+  background: linear-gradient(135deg, #7C9EFF 0%, #5C7CFF 100%);
+  color: white;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.payment-button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.payment-button:not(:disabled):hover {
+  opacity: 0.9;
 }
 </style>

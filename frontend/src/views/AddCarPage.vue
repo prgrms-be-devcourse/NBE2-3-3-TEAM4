@@ -16,7 +16,7 @@ const validateAndFormatCarNumber = (value) => {
 };
 
 const goBack = () => {
-  router.push('/car');
+  router.back();
 }
 
 const addCar = async () => {
@@ -29,12 +29,12 @@ const addCar = async () => {
     await axios.post('/api/cars', {
     carNumber: carNumber.value,
   });
-  } catch {
-    alert('예기치 않은 오류가 발생하였습니다.');
+  } catch(error) {
+    alert(error.response.data.message);
     return;
   }
   alert('차량 등록이 완료되었습니다.');
-  router.push('/car');
+  router.back();
 }
 </script>
 
