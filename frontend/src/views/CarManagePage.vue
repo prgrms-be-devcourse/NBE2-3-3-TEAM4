@@ -93,19 +93,19 @@ onMounted(async () => {
       </div>
     </button>
 
-    <button class="action-button add-car-button" @click="toAddCar">
-      <span class="button-icon">+</span>
-      <div class="button-text">
-        <span class="primary-text">차량 등록</span>
-        <span class="secondary-text">최대 3개까지 등록 가능해요</span>
-      </div>
-    </button>
-
     <button class="action-button delete-car-button" @click="deleteCar">
       <span class="button-icon">-</span>
       <div class="button-text">
         <span class="primary-text">차량 삭제</span>
         <span class="secondary-text">차량을 선택하고 누르면 삭제되요</span>
+      </div>
+    </button>
+
+    <button class="action-button add-car-button" @click="toAddCar">
+      <span class="button-icon">+</span>
+      <div class="button-text">
+        <span class="primary-text">차량 등록</span>
+        <span class="secondary-text">최대 3개까지 등록 가능해요</span>
       </div>
     </button>
   </div>
@@ -193,7 +193,7 @@ onMounted(async () => {
 }
 
 .car-item.selected .car-number {
-  color: #gray;
+  color: #313131;
 }
 
 .primary-badge {

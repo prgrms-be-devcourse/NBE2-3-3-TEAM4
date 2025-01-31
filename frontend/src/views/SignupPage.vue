@@ -15,7 +15,7 @@ const userInfo = ref({
 });
 
 const goBack = () => {
-  router.back('/login');
+  router.back();
 };
 
 const signup = async () => {

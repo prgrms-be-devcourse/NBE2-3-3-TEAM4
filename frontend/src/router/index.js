@@ -48,6 +48,25 @@ const router = createRouter({
       name: 'search',
       component: () => import('../views/SearchPage.vue'),
     },
+    {
+      path: '/parking/:id',
+      name: 'parking',
+      component: () => import('../views/ParkingPage.vue'),
+    },
+    {
+      path: '/parking/:id/payment/:ticketId',
+      name: 'payment',
+      component: () => import('../views/PaymentPage.vue'),
+    },
+    {
+      path: '/payment/process/:orderId',
+      name: 'payment-process',
+      component: () => import('../views/PaymentProcessPage.vue'),
+    }, {
+      path: '/payment/success',
+      name: 'payment-success',
+      component: () => import('../views/PaymentSuccessPage.vue'),
+    }
   ],
 })
 
