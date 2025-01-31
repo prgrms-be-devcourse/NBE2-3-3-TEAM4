@@ -14,6 +14,7 @@ import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.io.IOException
 import java.net.URI
 import java.net.http.HttpClient
@@ -71,6 +72,7 @@ class TossPaymentService(
      * @param requestDto TosspaymentRequest.PaymentConfirmation
      * @return Long
      */
+    @Transactional
     fun confirmPayment(requestDto: PaymentConfirmation): String {
         var order: Order? = null
         var confirmPaymentResponse: JSONObject? = null
@@ -84,6 +86,17 @@ class TossPaymentService(
 
         // 결제 성공 처리
         updateOrderPaymentAndStatus(order, confirmPaymentResponse)
+
+        val orderDetail = order.orderDetail
+        val paymentDate = order.paymentDate
+
+        paymentDate?.let { orderDetail.updateStartParkingTime(it.plusMinutes(10)) }
+
+        val duration = order.ticket.parkingDuration?.toLong() ?: 0L  // null 방지
+        if (paymentDate != null) {
+            orderDetail.updateEndParkingTime(paymentDate.plusMinutes(10).plusHours(duration))
+        }
+
         return order.id
     }
 

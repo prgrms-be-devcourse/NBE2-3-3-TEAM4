@@ -99,7 +99,7 @@ class OrderService(
         val orderDetail = order.orderDetail
 
         // 입차 시간 조회
-        val startParkingTime = orderDetail.startParkingTime ?: throw BadRequestException(ErrorCode.NOT_PARKED)
+        val startParkingTime = orderDetail.startParkingTime ?: LocalDateTime.now()
 
         // 출차 시간 조회
         val endTime = orderDetail.endParkingTime ?: LocalDateTime.now()
@@ -107,12 +107,13 @@ class OrderService(
 
         val basePkDuration = ticket.parkingDuration!! * 60
         val addPkDuration = (minutes - basePkDuration).toInt()
+        val paymentDate = order.paymentDate
 
         return if (addPkDuration <= 0) {
-            OrderResponse.from(parking, orderDetail, ticket, 0, 0)
+            OrderResponse.from(parking, orderDetail, ticket, 0, 0, paymentDate)
         } else {
             val addPrice = calculateAdditionalPrice(parking, addPkDuration)
-            OrderResponse.from(parking, orderDetail, ticket, addPkDuration, addPrice)
+            OrderResponse.from(parking, orderDetail, ticket, addPkDuration, addPrice, paymentDate)
         }
     }
 

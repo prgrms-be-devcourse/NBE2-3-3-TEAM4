@@ -5,6 +5,7 @@ import com.nbe2_3_3_team4.backend.domain.order.entity.OrderDetail
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 data class OrderResponse(
@@ -12,18 +13,19 @@ data class OrderResponse(
     val addr: String?,
     val carNum: String,
     val startTime: String?,
-    val endTime: String,
+    val endTime: String?,
     val pkDuration: Int?,
     val price: Int?,
     val addPkDuration: Int,
     val addPrice: Int,
-    val totalPrice: Int
+    val totalPrice: Int,
+    val paymentDate: LocalDateTime?,
 ) {
     companion object {
-        fun from(parking: Parking, orderDetail: OrderDetail, ticket: Ticket, addPkDuration: Int, addPrice: Int): OrderResponse {
+        fun from(parking: Parking, orderDetail: OrderDetail, ticket: Ticket, addPkDuration: Int, addPrice: Int, paymentDate: LocalDateTime?): OrderResponse {
             val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a h시 mm분")
             val start = orderDetail.startParkingTime?.format(formatter)
-            val end = orderDetail.endParkingTime?.format(formatter) ?: "주차중"
+            val end = orderDetail.endParkingTime?.format(formatter)
 
             return OrderResponse(
                 parking.name,
@@ -35,7 +37,8 @@ data class OrderResponse(
                 ticket.price,
                 addPkDuration,
                 addPrice,
-                ticket.price!! + addPrice
+                ticket.price!! + addPrice,
+                paymentDate
             )
         }
     }
