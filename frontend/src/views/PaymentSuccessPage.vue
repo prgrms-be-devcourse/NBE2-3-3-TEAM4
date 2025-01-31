@@ -49,9 +49,21 @@ const confirmPayment = async () => {
       amount: amount,
     });
 
+    await getOrder();
+
     loading.value = false;
   } catch (error) {
     alert(error.response.data.message);
+  }
+}
+
+const order = ref(null);
+const getOrder = async () => {
+  try {
+    const response = await axios.get(`/api/orders/${orderId}`);
+    order.value = response.data.data;
+  } catch (error) {
+    console.error("주문 조회 실패:", error);
   }
 }
 
@@ -82,6 +94,14 @@ const goBack = () => {
       <img src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" width="120" height="120" />
       <h2 class="title">결제를 완료했어요</h2>
       <div class="response-section w-100">
+        <div class="flex justify-between">
+          <span class="response-label">주차장명</span>
+          <span class="response-text">{{ order.parking }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="response-label">상품명</span>
+          <span class="response-text">{{ order.pkDuration }}시간 주차권</span>
+        </div>
         <div class="flex justify-between">
           <span class="response-label">결제 금액</span>
           <span class="response-text">{{ amount.toLocaleString() }} 원</span>
