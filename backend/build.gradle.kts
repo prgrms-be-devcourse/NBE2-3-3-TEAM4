@@ -1,11 +1,21 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "3.3.6"
     id("io.spring.dependency-management") version "1.1.6"
+
     kotlin("jvm") version "2.0.0"
     kotlin("plugin.spring") version "2.0.0"
     kotlin("plugin.jpa") version "2.0.0"
+    kotlin("plugin.noarg") version "2.0.0"
+    kotlin("plugin.allopen") version "2.0.0"
+}
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -52,7 +62,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
 
     // json
-    implementation ("org.json:json:20210307")
+    implementation ("org.json:json:20231013")
 
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf:3.3.6")
 
@@ -62,11 +72,12 @@ dependencies {
 
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+    compilerOptions {
+        freeCompilerArgs.set(listOf("-Xjsr305=strict"))
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
+
 
 tasks.withType<Test> {
     useJUnitPlatform()

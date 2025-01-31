@@ -1,4 +1,4 @@
-package com.nbe2_3_3_team4.backend.domain.order.entity.enum
+package com.nbe2_3_3_team4.backend.domain.order.entity.enums
 
 enum class OrderStatus(val message: String) {
     WAITING("주차 대기"),

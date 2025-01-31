@@ -1,8 +1,8 @@
 package com.nbe2_3_3_team4.backend.domain.order.entity
 
 import com.nbe2_3_3_team4.backend.domain.member.entity.Member
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.global.BaseTime
 import jakarta.persistence.*
@@ -10,10 +10,10 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "orders")
-open class Order(
+class Order(
     @Id
     @Column(name = "order_id")
-    val id: String,
+    var id: String,
 
     @Enumerated(EnumType.STRING)
     var orderStatus: OrderStatus = OrderStatus.WAITING,
@@ -23,15 +23,15 @@ open class Order(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
-    val ticket: Ticket,
+    var ticket: Ticket,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    val member: Member,
+    var member: Member,
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE], orphanRemoval = true)
     @JoinColumn(name = "order_detail_id")
-    val orderDetail: OrderDetail,
+    var orderDetail: OrderDetail,
 
     @Column(nullable = true)
     var paymentDate: LocalDateTime? = null,
@@ -47,7 +47,7 @@ open class Order(
         this.orderStatus = orderStatus
     }
 
-    fun updatePaymentInfo(paymentKey: String, paymentDate: LocalDateTime) {
+    fun updatePaymentInfo(paymentKey: String?, paymentDate: LocalDateTime?) {
         this.paymentKey = paymentKey
         this.paymentDate = paymentDate
     }

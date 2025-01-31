@@ -56,4 +56,14 @@ class ParkingController(val parkingService: ParkingService) {
         return ResponseEntity.ok()
                 .body(ApiResponse.createSuccess(parkingService.exitParking(carNumber)))
     }
+
+    @Operation(summary = "주차장 별 주차권 조회 API", description = "주차장의 주차권 목록을 조회합니다.")
+    @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"))
+    @GetMapping("/{parkingId}/tickets")
+    fun getTicketsByParking(
+        @PathVariable parkingId: Long
+    ) : ResponseEntity<ApiResponse<List<GetTicketByParking>>> {
+        return ResponseEntity.ok()
+            .body(ApiResponse.createSuccess(parkingService.getTicketsByParking(parkingId)))
+    }
 }

@@ -2,7 +2,7 @@ package com.nbe2_3_3_team4.backend.domain.order.repository
 
 import com.nbe2_3_3_team4.backend.domain.member.entity.Member
 import com.nbe2_3_3_team4.backend.domain.order.entity.Order
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDateTime
 import java.util.Optional

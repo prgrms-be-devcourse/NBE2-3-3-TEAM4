@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "order_details")
-open class OrderDetail(
+data class OrderDetail(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,  // 기본값을 null로 설정하여 생성자를 통해 null을 받을 수 있게 함

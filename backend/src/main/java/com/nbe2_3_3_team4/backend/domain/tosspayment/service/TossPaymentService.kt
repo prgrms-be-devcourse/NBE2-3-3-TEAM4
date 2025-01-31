@@ -1,7 +1,8 @@
 package com.nbe2_3_3_team4.backend.domain.tosspayment.service
 
+
 import com.nbe2_3_3_team4.backend.domain.order.entity.Order
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderRepository
 import com.nbe2_3_3_team4.backend.domain.parking.entity.ParkingStatus
 import com.nbe2_3_3_team4.backend.domain.parking.repository.ParkingStatusRepository
@@ -12,7 +13,6 @@ import jakarta.servlet.http.HttpSession
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.IOException
 import java.net.URI

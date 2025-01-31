@@ -1,6 +1,7 @@
 package com.nbe2_3_3_team4.backend.scheduler
 
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus.*
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus.*
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus.COMPLETE
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderRepository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -20,6 +21,7 @@ class ScheduleService (
         // 'created_at'이 1시간 10분 이상 경과한 주문을 찾고 갱신
         orderRepository.findAllByCreatedAtBeforeAndOrderStatus(timeThreshold, WAITING).forEach { order ->
             order.updateOrderStatus(CANCELED) // 주문 상태를 '만료'로 변경 / 추수 EXPIRED 로 변경 할지 고민
+            order.updatePaymentStatus(COMPLETE)
             order.ticket.price?.let {
                 order.orderDetail.updateCancelPrice(it)
                 order.orderDetail.updateTotalPrice(it)
