@@ -6,7 +6,6 @@ import com.nbe2_3_3_team4.backend.global.exception.JWTCustomException
 import com.nbe2_3_3_team4.backend.security.util.TokenProvider
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.stereotype.Component
 import org.springframework.util.AntPathMatcher
 import org.springframework.util.StringUtils
 import org.springframework.web.filter.OncePerRequestFilter
@@ -19,8 +18,6 @@ import jakarta.servlet.http.HttpServletResponse
 
 //@Component
 class JWTFilter(private val tokenProvider: TokenProvider) : OncePerRequestFilter() {
-
-
     // Request Header 에서 토큰 정보를 꺼내오기 위한 메소드
     private fun resolveToken(token: String): String {
 
@@ -62,7 +59,6 @@ class JWTFilter(private val tokenProvider: TokenProvider) : OncePerRequestFilter
                 "/api/auth/signup/admin",
                 "/ttukttak-parking/**",
                 "/api/auth/kakao/search",
-                "/api/parking/**",
         )
 
         val path: String = UrlPathHelper().getPathWithinApplication(request)

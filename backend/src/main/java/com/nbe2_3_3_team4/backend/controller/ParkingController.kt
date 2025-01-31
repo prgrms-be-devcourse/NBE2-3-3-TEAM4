@@ -40,4 +40,30 @@ class ParkingController(val parkingService: ParkingService) {
         return ResponseEntity.ok()
                 .body(ApiResponse.createSuccess(parkingService.getParkingStatus(parkingId)))
     }
+
+    @Operation(summary = "입차 API", description = "주차장에 차량을 입차합니다.")
+    @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "성공"))
+    @PostMapping("/{carNumber}/enter")
+    fun enterParking(@PathVariable carNumber: String, ): ResponseEntity<ApiResponse<GetEnterParking>> {
+        return ResponseEntity.ok()
+                .body(ApiResponse.createSuccess(parkingService.enterParking(carNumber)))
+    }
+
+    @Operation(summary = "출차 API", description = "주차장에서 차량을 출차합니다.")
+    @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"))
+    @PutMapping("/{carNumber}/exit")
+    fun exitParking(@PathVariable carNumber: String): ResponseEntity<ApiResponse<GetExitParking>> {
+        return ResponseEntity.ok()
+                .body(ApiResponse.createSuccess(parkingService.exitParking(carNumber)))
+    }
+
+    @Operation(summary = "주차장 별 주차권 조회 API", description = "주차장의 주차권 목록을 조회합니다.")
+    @ApiResponses(io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"))
+    @GetMapping("/{parkingId}/tickets")
+    fun getTicketsByParking(
+        @PathVariable parkingId: Long
+    ) : ResponseEntity<ApiResponse<List<GetTicketByParking>>> {
+        return ResponseEntity.ok()
+            .body(ApiResponse.createSuccess(parkingService.getTicketsByParking(parkingId)))
+    }
 }

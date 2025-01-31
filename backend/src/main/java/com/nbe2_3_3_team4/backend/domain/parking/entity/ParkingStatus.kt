@@ -14,7 +14,7 @@ data class ParkingStatus (
     var usedParkingSpace: Int = 0, // 사용중인 주차 면
     var space_updated_at: LocalDateTime? = null // 사용 주차면 업데이트 시간
 ) {
-    fun ModifyTotalParkingSpaceOfJson() { this.totalParkingSpace += 1 }
+    fun modifyTotalParkingSpaceOfJson() { this.totalParkingSpace += 1 }
 
     fun updateUsedParkingSpace() {
         this.usedParkingSpace +=1
@@ -24,9 +24,6 @@ data class ParkingStatus (
         this.usedParkingSpace -= 1
     }
 
-    fun decreaseUsedParkingSpace() {
-        this.usedParkingSpace -= 1
-    }
 
     companion object {
 		fun to(data: JsonNode): ParkingStatus {

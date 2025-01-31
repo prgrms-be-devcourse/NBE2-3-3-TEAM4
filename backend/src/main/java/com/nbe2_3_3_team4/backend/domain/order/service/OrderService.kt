@@ -1,13 +1,13 @@
 package com.nbe2_3_3_team4.backend.domain.order.service
 
-import com.nbe2_3_3_team4.backend.domain.car.repository.CarRepository
+
 import com.nbe2_3_3_team4.backend.domain.member.repository.MemberRepository
 import com.nbe2_3_3_team4.backend.domain.order.dto.OrderRequest
 import com.nbe2_3_3_team4.backend.domain.order.dto.OrderResponse
 import com.nbe2_3_3_team4.backend.domain.order.entity.Order
 import com.nbe2_3_3_team4.backend.domain.order.entity.OrderDetail
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.OrderStatus
-import com.nbe2_3_3_team4.backend.domain.order.entity.enum.PaymentStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.OrderStatus
+import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderDetailRepository
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderRepository
 import com.nbe2_3_3_team4.backend.domain.parking.entity.Parking
@@ -30,7 +30,6 @@ class OrderService(
     private val orderDetailRepository: OrderDetailRepository,
     private val memberRepository: MemberRepository,
     private val ticketRepository: TicketRepository,
-    private val carRepository: CarRepository
 ) {
 
     private fun getRandomOrderId(): String = UUID.randomUUID().toString()
@@ -52,7 +51,15 @@ class OrderService(
         val newOrderId = getRandomOrderId()
 
         val newOrder = if (isAvailable(parkingStatus!!)) {
-            val orderDetail = OrderDetail.createOrderDetail(ticket.price!!, request.carNumber)
+            orderRepository.findAllByOrderStatusInAndOrderDetailCarNumber(listOf(OrderStatus.WAITING, OrderStatus.PARKING), request.carNumber).forEach {
+                when (it.orderStatus) {
+                    OrderStatus.WAITING -> throw BadRequestException(ErrorCode.ALREADY_ORDERED)
+                    OrderStatus.PARKING -> throw BadRequestException(ErrorCode.PARKING_IN_PROGRESS)
+                    else -> {}
+                }
+            }
+
+            val orderDetail = OrderDetail.createOrderDetail(request.carNumber)
             orderDetailRepository.save(orderDetail)
 
             val order = Order.createOrder(newOrderId, ticket, member, orderDetail)
@@ -76,6 +83,13 @@ class OrderService(
         return (totalParkingSpace - usedParkingSpace) > 0
     }
 
+    fun getOrderForPayment(orderId: String) : OrderResponse.getOrderForPayment {
+        val order = orderRepository.findById(orderId)
+            .orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
+
+        return OrderResponse.getOrderForPayment.from(order.ticket.parkingDuration, order.ticket.price)
+    }
+
     fun getOrder(orderId: String): OrderResponse {
         val order = orderRepository.findById(orderId)
             .orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
@@ -85,8 +99,7 @@ class OrderService(
         val orderDetail = order.orderDetail
 
         // 입차 시간 조회
-        val startParkingTime = orderDetail.startParkingTime
-            ?: throw BadRequestException(ErrorCode.NOT_PARKED)
+        val startParkingTime = orderDetail.startParkingTime ?: throw BadRequestException(ErrorCode.NOT_PARKED)
 
         // 출차 시간 조회
         val endTime = orderDetail.endParkingTime ?: LocalDateTime.now()
@@ -110,7 +123,7 @@ class OrderService(
 
     fun completePay(payId: String): String {
         val order = orderRepository.findByPaymentKey(payId)
-            //.orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
+        //.orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
             ?: throw NotFoundException(ErrorCode.ORDER_NOT_FOUND)
 
         order.updatePaymentStatus(PaymentStatus.COMPLETE)
@@ -129,11 +142,14 @@ class OrderService(
             val refundMessage = if (order.createdAt!!.plusMinutes(10).isAfter(LocalDateTime.now())) {
                 order.updateOrderStatus(OrderStatus.CANCELED)
                 order.updatePaymentStatus(PaymentStatus.COMPLETE)
+                with(order.orderDetail) { updateCancelPrice(0); updateTotalPrice(0) } // 취소 수수료 계산
                 order.ticket.parking!!.parkingStatus!!.decreaseUsedParkingSpace()
                 "전액 환불되었습니다."
             } else {
                 order.updateOrderStatus(OrderStatus.CANCELED)
                 order.updatePaymentStatus(PaymentStatus.COMPLETE)
+                order.orderDetail.updateCancelPrice(order.ticket.price!! / 2)
+                with(order.orderDetail) { order.ticket.price?.let{updateCancelPrice(it/2); updateTotalPrice(it/2)} } // 취소 수수료 계산
                 order.ticket.parking!!.parkingStatus!!.decreaseUsedParkingSpace()
                 "구매 후 10분 이상이 경과되어 이용 금액의 50% 환불되었습니다."
             }
@@ -146,6 +162,17 @@ class OrderService(
     fun deleteOrder(id: String): Void? {
         val order = orderRepository.findByPaymentKey(id)
             ?: throw NotFoundException(ErrorCode.ORDER_NOT_FOUND)
+
+        val parkingStatus = order.ticket.parking!!.parkingStatus
+        parkingStatus!!.decreaseUsedParkingSpace()
+
+        orderRepository.delete(order)
+        return null
+    }
+
+    fun deleteOrderById(orderId: String): Void? {
+        val order = orderRepository.findById(orderId)
+        .orElseThrow { NotFoundException(ErrorCode.ORDER_NOT_FOUND) }
 
         val parkingStatus = order.ticket.parking!!.parkingStatus
         parkingStatus!!.decreaseUsedParkingSpace()

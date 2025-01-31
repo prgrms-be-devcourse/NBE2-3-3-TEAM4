@@ -1,5 +1,6 @@
 package com.nbe2_3_3_team4.backend.domain.tosspayment.service
 
+
 import com.nbe2_3_3_team4.backend.domain.order.entity.Order
 import com.nbe2_3_3_team4.backend.domain.order.entity.enums.PaymentStatus
 import com.nbe2_3_3_team4.backend.domain.order.repository.OrderRepository
@@ -12,7 +13,6 @@ import jakarta.servlet.http.HttpSession
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.IOException
 import java.net.URI
@@ -28,12 +28,11 @@ import java.util.*
 class TossPaymentService(
     val orderRepository: OrderRepository,
     val parkingStatusRepository: ParkingStatusRepository,
-    @Value("\${TOSS_PAYMENT_SECRET_KEY}")
-    private val secretKey: String
+
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(TossPaymentService::class.java)
-
+    private val secretKey: String = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6"
     /**
      * 결제 전 금액 세션에 저장 메서드
      *

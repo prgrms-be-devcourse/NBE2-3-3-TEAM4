@@ -1,5 +1,6 @@
 package com.nbe2_3_3_team4.backend.controller
 
+
 import com.nbe2_3_3_team4.backend.domain.order.dto.OrderRequest
 import com.nbe2_3_3_team4.backend.domain.order.dto.OrderResponse
 import com.nbe2_3_3_team4.backend.domain.order.service.OrderService
@@ -59,9 +60,19 @@ class OrderController(
         return ResponseEntity.ok(ApiResponse.createSuccess(response))
     }
 
-    @DeleteMapping("/{payId}")
+    @DeleteMapping("/{payId}/pay")
     fun deleteOrder(@PathVariable payId: String): ResponseEntity<ApiResponse<Void?>> {
         return ResponseEntity.ok(ApiResponse.createSuccess(orderService.deleteOrder(payId)))
+    }
+
+    @DeleteMapping("/{orderId}")
+    fun deleteOrderById(@PathVariable orderId: String): ResponseEntity<ApiResponse<Void?>> {
+        return ResponseEntity.ok(ApiResponse.createSuccess(orderService.deleteOrderById(orderId)))
+    }
+
+    @GetMapping("/{orderId}/payments")
+    fun getOrderForPayments(@PathVariable orderId: String): ResponseEntity<ApiResponse<OrderResponse.getOrderForPayment>> {
+        return ResponseEntity.ok(ApiResponse.createSuccess(orderService.getOrderForPayment(orderId)))
     }
 
     @Operation(summary = "주차권 구매 기록 조회 API", description = "주차권 구매 기록을 조회합니다.")
