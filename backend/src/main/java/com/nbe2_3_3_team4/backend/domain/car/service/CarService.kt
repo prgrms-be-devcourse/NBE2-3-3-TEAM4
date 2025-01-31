@@ -18,7 +18,7 @@ import java.util.*
 class CarService(private val carRepository : CarRepository ,private val memberRepository: MemberRepository) {
     @Transactional
     fun registerCar(dto: CarRequest.RegCar, email: String?): CarResponse.RegCar {
-        val member = memberRepository.findByEmail(email)?.orElse(null) ?: throw  NotFoundException(ErrorCode.USER_NOT_FOUND)
+        val member = memberRepository.findByEmail(email).orElse(null) ?: throw  NotFoundException(ErrorCode.USER_NOT_FOUND)
         if(carRepository.existsByNumber(dto.carNumber)) {throw DuplicateException(ErrorCode.CAR_ALREADY_EXISTS)}
 
         // 회원의 현재 등록된 차량 수 확인
@@ -36,7 +36,7 @@ class CarService(private val carRepository : CarRepository ,private val memberRe
 
     @Transactional(readOnly = true)
     fun getCars(email: String?): List<GetCar> {
-        val member = memberRepository.findByEmail(email)?.orElse(null) ?: throw NotFoundException(ErrorCode.USER_NOT_FOUND)
+        val member = memberRepository.findByEmail(email).orElse(null) ?: throw NotFoundException(ErrorCode.USER_NOT_FOUND)
         val cars: MutableList<GetCar> = ArrayList()
         for (car in member.cars) {
             cars.add(GetCar.from(car))
@@ -52,7 +52,7 @@ class CarService(private val carRepository : CarRepository ,private val memberRe
 
     @Transactional
     fun delete(carId: Long): Void? {
-        val car = carRepository.findById(carId).orElse(null) ?: throw NotFoundException(ErrorCode.CAR_NOT_FOUND);
+        val car = carRepository.findById(carId).orElse(null) ?: throw NotFoundException(ErrorCode.CAR_NOT_FOUND)
         carRepository.delete(car)
         return null
     }

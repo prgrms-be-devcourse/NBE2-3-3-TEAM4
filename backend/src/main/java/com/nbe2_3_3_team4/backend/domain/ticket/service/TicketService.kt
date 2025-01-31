@@ -1,7 +1,6 @@
 package com.nbe2_3_3_team4.backend.domain.ticket.service
 
 import com.nbe2_3_3_team4.backend.domain.ticket.dto.TicketResponse
-import com.nbe2_3_3_team4.backend.domain.ticket.entity.Ticket
 import com.nbe2_3_3_team4.backend.domain.ticket.repository.TicketRepository
 import com.nbe2_3_3_team4.backend.global.exception.ErrorCode
 import com.nbe2_3_3_team4.backend.global.exception.NotFoundException

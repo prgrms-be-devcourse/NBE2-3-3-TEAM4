@@ -1,7 +1,6 @@
 package com.nbe2_3_3_team4.backend.global.exception
 
 import com.nbe2_3_3_team4.backend.global.response.ApiResponse
-import jakarta.persistence.EntityNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.NoHandlerFoundException
 import java.io.IOException
 import java.util.stream.Collectors
+import jakarta.persistence.EntityNotFoundException
 
 
 /**

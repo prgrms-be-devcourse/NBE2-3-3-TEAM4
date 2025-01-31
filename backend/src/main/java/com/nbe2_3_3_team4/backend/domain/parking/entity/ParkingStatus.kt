@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "parking_status")
-class ParkingStatus (
+data class ParkingStatus (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var parkingStatusId: Long? = null,

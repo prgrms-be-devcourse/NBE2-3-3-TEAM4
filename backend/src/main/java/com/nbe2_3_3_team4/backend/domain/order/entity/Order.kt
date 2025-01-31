@@ -53,7 +53,6 @@ class Order(
     }
 
     companion object {
-        @JvmStatic
         fun createOrder(
             id: String,
             ticket: Ticket,

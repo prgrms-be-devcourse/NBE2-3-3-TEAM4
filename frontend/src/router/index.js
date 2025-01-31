@@ -49,6 +49,7 @@ const router = createRouter({
       component: () => import('../views/SearchPage.vue'),
     },
     {
+
       path: '/parking/:id',
       name: 'parking',
       component: () => import('../views/ParkingPage.vue'),
