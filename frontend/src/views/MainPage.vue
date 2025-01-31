@@ -1,6 +1,9 @@
 <script setup >
     import { useRouter } from 'vue-router';
     import NavBar from '@/components/NavBar.vue';
+    import { usePlaceStore } from '../stores/place';
+    import { onMounted } from 'vue';
+    const placeStore = usePlaceStore();
 
     const router = useRouter();
 
@@ -11,6 +14,10 @@
     const toSearchPage = () => {
         router.push('/search');
     }
+
+    onMounted(() => {
+        placeStore.setSelectedPlace(null);
+    })
 </script>
 
 <template>

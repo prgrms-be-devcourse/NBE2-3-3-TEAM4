@@ -59,6 +59,7 @@ class JWTFilter(private val tokenProvider: TokenProvider) : OncePerRequestFilter
                 "/api/auth/signup/admin",
                 "/ttukttak-parking/**",
                 "/api/auth/kakao/search",
+                "/api/parking/**"
         )
 
         val path: String = UrlPathHelper().getPathWithinApplication(request)
