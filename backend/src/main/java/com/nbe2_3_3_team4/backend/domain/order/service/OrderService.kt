@@ -108,12 +108,13 @@ class OrderService(
         val basePkDuration = ticket.parkingDuration!! * 60
         val addPkDuration = (minutes - basePkDuration).toInt()
         val paymentDate = order.paymentDate
+        val orderStatus = order.orderStatus
 
         return if (addPkDuration <= 0) {
-            OrderResponse.from(parking, orderDetail, ticket, 0, 0, paymentDate)
+            OrderResponse.from(parking, orderDetail, ticket, 0, 0, paymentDate, orderStatus.message)
         } else {
             val addPrice = calculateAdditionalPrice(parking, addPkDuration)
-            OrderResponse.from(parking, orderDetail, ticket, addPkDuration, addPrice, paymentDate)
+            OrderResponse.from(parking, orderDetail, ticket, addPkDuration, addPrice, paymentDate, orderStatus.message)
         }
     }
 
@@ -140,10 +141,10 @@ class OrderService(
         }
 
         if (order.orderStatus == OrderStatus.WAITING) {
-            val refundMessage = if (order.createdAt!!.plusMinutes(10).isAfter(LocalDateTime.now())) {
+            val refundMessage = if (order.paymentDate!!.plusMinutes(10).isAfter(LocalDateTime.now())) {
                 order.updateOrderStatus(OrderStatus.CANCELED)
                 order.updatePaymentStatus(PaymentStatus.COMPLETE)
-                with(order.orderDetail) { updateCancelPrice(0); updateTotalPrice(0) } // 취소 수수료 계산
+                with(order.orderDetail) { updateCancelPrice(0); order.ticket.price?.let { updateTotalPrice(it) } } // 취소 수수료 계산
                 order.ticket.parking!!.parkingStatus!!.decreaseUsedParkingSpace()
                 "전액 환불되었습니다."
             } else {

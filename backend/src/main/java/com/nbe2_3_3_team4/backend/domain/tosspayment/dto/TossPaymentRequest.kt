@@ -11,4 +11,11 @@ class TossPaymentRequest {
         val paymentKey: String,
         val amount: String
     )
+
+    data class PaymentCancel(
+        val orderId: String,
+        val paymentKey: String,
+        val cancelAmount: Long? = null,
+        val cancelReason: String? = "사용자 요청으로 인한 결제 취소"
+    )
 }

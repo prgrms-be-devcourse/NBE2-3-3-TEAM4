@@ -20,9 +20,10 @@ data class OrderResponse(
     val addPrice: Int,
     val totalPrice: Int,
     val paymentDate: LocalDateTime?,
+    val status: String
 ) {
     companion object {
-        fun from(parking: Parking, orderDetail: OrderDetail, ticket: Ticket, addPkDuration: Int, addPrice: Int, paymentDate: LocalDateTime?): OrderResponse {
+        fun from(parking: Parking, orderDetail: OrderDetail, ticket: Ticket, addPkDuration: Int, addPrice: Int, paymentDate: LocalDateTime?, orderStatus: String): OrderResponse {
             val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a h시 mm분")
             val start = orderDetail.startParkingTime?.format(formatter)
             val end = orderDetail.endParkingTime?.format(formatter)
@@ -38,7 +39,8 @@ data class OrderResponse(
                 addPkDuration,
                 addPrice,
                 ticket.price!! + addPrice,
-                paymentDate
+                paymentDate,
+                orderStatus
             )
         }
     }
@@ -70,16 +72,15 @@ data class OrderResponse(
         val orderId: String,
         val parkingId: Long,
         val carNum: String,
-        val time: String,
         val status: String,
+        val startTime: String?,
+        val endTime: String?,
         val duration: Int,
         val price: Int
     ) {
         companion object {
             fun from(order: Order, parking: Parking, ticket: Ticket): GetOrderHistory {
-                val start = order.createdAt!!
                 val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a h시 mm분")
-                val time = start.format(formatter)
                 val status = when (order.orderStatus) {
                     OrderStatus.WAITING -> "주차 대기"
                     OrderStatus.PARKING -> "주차중"
@@ -87,12 +88,16 @@ data class OrderResponse(
                     else -> "주차 완료"
                 }
 
+                val startTime = order.orderDetail.startParkingTime?.format(formatter)
+                val endTime = order.orderDetail.endParkingTime?.format(formatter)
+
                 return GetOrderHistory(
                     order.id,
                     parking.parkingId!!,
                     order.orderDetail.carNumber,
-                    time,
                     status,
+                    startTime,
+                    endTime,
                     ticket.parkingDuration!!,
                     ticket.price!!
                 )
