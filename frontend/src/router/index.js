@@ -67,6 +67,26 @@ const router = createRouter({
       path: '/payment/success',
       name: 'payment-success',
       component: () => import('../views/PaymentSuccessPage.vue'),
+    }, {
+      path: '/my-ticket/cancel/:orderId',
+      name: 'cancel-order',
+      component: () => import('../views/CancelOrderPage.vue'),
+    }, {
+      path: '/payment/fail',
+      name: 'payment-fail',
+      component: () => import('../views/PaymentFailPage.vue'),
+    }, {
+      path: '/payment/cancel/:amount',
+      name: 'payment-cancel',
+      component: () => import('../views/PaymentCancelSuccessPage.vue'),
+    }, {
+      path: '/ticket-history',
+      name: 'ticket-history',
+      component: () => import('../views/MyOrderHistoryPage.vue'),
+    }, {
+      path: '/ticket-history/:orderId',
+      name: 'ticket-history-detail',
+      component: () => import('../views/TicketHistoryDetailPage.vue'),
     }
   ],
 })

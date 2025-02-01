@@ -110,7 +110,6 @@ const goBack = async () => {
   router.back();
 };
 
-// ✅ 마운트 시 실행
 onMounted(async () => {
   await getMember();
   await getOrder();

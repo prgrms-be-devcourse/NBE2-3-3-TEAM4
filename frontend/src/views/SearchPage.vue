@@ -59,6 +59,7 @@ const currentLocation = ref({
 
 const placeStore = usePlaceStore();
 const isLoading = ref(true);
+const isDataLoaded = ref(false);
 
 onMounted(async () => {
   try {
@@ -71,8 +72,10 @@ onMounted(async () => {
     } else {
       await getNearbyParking(location.latitude, location.longitude);
     }
+
   } finally {
     isLoading.value = false;
+    isDataLoaded.value = true;
   }
 });
 
@@ -133,7 +136,7 @@ const handleClickStatus = (parking) => {
 <template>
   <NavBar />
   <InputBar @back="goBack" @search="handleSearch" @click="handleClick"/>
-  <div v-if="!isLoading && currentLocation.latitude && currentLocation.longitude">
+  <div v-if="!isLoading && currentLocation.latitude && currentLocation.longitude && nearbyParking">
     <KakaoMap
       :lat="currentLocation.latitude"
       :lng="currentLocation.longitude"
@@ -144,38 +147,40 @@ const handleClickStatus = (parking) => {
       id="map"
       @onLoadKakaoMap="onLoadKakaoMap"
     >
-      <KakaoMapMarker
-        :lat="currentLocation.latitude"
-        :lng="currentLocation.longitude"
-        :image="{
-          imageSrc: '../src/assets/icons/marker-mylocation.png',
-          imageWidth: 37,
-          imageHeight: 37,
-          imageOption: {}
-        }"
-      />
-      <KakaoMapMarker v-if="placeStore.selectedPlace"
-      :lat="placeStore.selectedPlace.y"
-      :lng="placeStore.selectedPlace.x"
-      :image="{
-        imageSrc: '../src/assets/icons/search-marker.png',
-        imageWidth: 37,
-        imageHeight: 37,
-        imageOption: {}
-      }"
-      />
-      <KakaoMapMarker v-for="(parking, index) in nearbyParking"
-      :key="index"
-      :lat="parking.latitude"
-      :lng="parking.longitude"
-      :id="parking.id"
-      :clickable="true"
-      :image="{
-        imageSrc: getMarkerImage(parking.status),
-        imageOption: {}
-      }"
-      @onClickKakaoMapMarker="handleClickParking(parking.id)"
-      />
+      <template v-if="isDataLoaded">
+        <KakaoMapMarker
+          :lat="currentLocation.latitude"
+          :lng="currentLocation.longitude"
+          :image="{
+            imageSrc: '../src/assets/icons/marker-mylocation.png',
+            imageWidth: 37,
+            imageHeight: 37,
+            imageOption: {}
+          }"
+        />
+        <KakaoMapMarker v-if="placeStore.selectedPlace"
+          :lat="placeStore.selectedPlace.y"
+          :lng="placeStore.selectedPlace.x"
+          :image="{
+            imageSrc: '../src/assets/icons/search-marker.png',
+            imageWidth: 37,
+            imageHeight: 37,
+            imageOption: {}
+          }"
+        />
+        <KakaoMapMarker v-for="(parking, index) in nearbyParking"
+          :key="index"
+          :lat="parking.latitude"
+          :lng="parking.longitude"
+          :id="parking.id"
+          :clickable="true"
+          :image="{
+            imageSrc: getMarkerImage(parking.status),
+            imageOption: {}
+          }"
+          @onClickKakaoMapMarker="handleClickParking(parking.id)"
+        />
+      </template>
     </KakaoMap>
     <div class="parking-footer">
       <div class="status-header">

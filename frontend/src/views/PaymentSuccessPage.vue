@@ -80,7 +80,7 @@ const goBack = () => {
     <!-- 결제 진행 중 UI -->
     <div v-if="loading" class="flex-column align-center confirm-loading w-100 max-w-540">
       <div class="flex-column align-center">
-        <img src="https://static.toss.im/lotties/loading-spot-apng.png" width="120" height="120" />
+        <img src="https://static.toss.im/lotties/loading-spot-apng.png" width="100" height="100" />
         <h2 class="title text-center">결제 요청까지 성공했어요.</h2>
         <h4 class="text-center description">결제 승인하고 완료해보세요.</h4>
       </div>
@@ -89,27 +89,32 @@ const goBack = () => {
       </div>
     </div>
 
-    <!-- 결제 완료 UI -->
     <div v-if="!loading" class="flex-column align-center confirm-success w-100 max-w-540">
-      <img src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" width="120" height="120" />
-      <h2 class="title">결제를 완료했어요</h2>
-      <div class="response-section w-100">
-        <div class="flex justify-between">
-          <span class="response-label">주차장명</span>
-          <span class="response-text">{{ order.parking }}</span>
+      <transition name="fade-bounce" appear>
+        <img src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" width="100" height="100" />
+      </transition>
+      <transition name="fade-up" appear>
+        <h2 class="title">결제를 완료했어요</h2>
+      </transition>
+      <transition name="fade-up" appear>
+        <div class="response-section w-100">
+          <div class="flex justify-between response-box">
+            <span class="response-label">주차장명</span>
+            <span class="response-text">{{ order.parking }}</span>
+          </div>
+          <div class="flex justify-between response-box">
+            <span class="response-label">상품명</span>
+            <span class="response-text">{{ order.pkDuration }}시간 주차권</span>
+          </div>
+          <div class="flex justify-between response-box">
+            <span class="response-label">결제 금액</span>
+            <span class="response-text">{{ amount.toLocaleString() }} 원</span>
+          </div>
         </div>
-        <div class="flex justify-between">
-          <span class="response-label">상품명</span>
-          <span class="response-text">{{ order.pkDuration }}시간 주차권</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="response-label">결제 금액</span>
-          <span class="response-text">{{ amount.toLocaleString() }} 원</span>
-        </div>
-      </div>
+      </transition>
 
       <div class="w-100 button-group">
-        <div class="flex" style="gap: 16px;">
+        <div class="flex" style="gap: 12px;">
           <button @click="goBack" class="btn primary w-100">홈으로 돌아가기</button>
         </div>
       </div>
@@ -166,7 +171,7 @@ cursor: pointer;
 }
 
 .btn.primary {
-background-color: #3282f6;
+  background: linear-gradient(135deg, #7C9EFF 0%, #5C7CFF 100%);
 color: #f9fcff;
 }
 
@@ -216,44 +221,84 @@ gap: 16px;
 }
 
 .title {
-margin-top: 32px;
-margin-bottom: 0;
-color: #191f28;
-font-weight: bold;
-font-size: 24px;
+  margin-top: 24px;
+  margin-bottom: 0;
+  color: #191f28;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .description {
-margin-top: 8px;
-color: #4e5968;
-font-size: 17px;
-font-weight: 500;
+  margin-top: 8px;
+  color: #4e5968;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .response-section {
-margin-top: 60px;
-display: flex;
-flex-direction: column;
-gap: 16px;
-font-size: 20px;
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 16px;
+}
+
+.response-box {
+  padding: 16px 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
 }
 
 .response-section .response-label {
-font-weight: 600;
-color: #333d48;
-font-size: 17px;
+  font-weight: 600;
+  color: #333d48;
+  font-size: 15px;
 }
 
 .response-section .response-text {
-font-weight: 500;
-color: #4e5968;
-font-size: 17px;
-padding-left: 16px;
-word-break: break-word;
-text-align: right;
+  font-weight: 600;
+  color: #4e5968;
+  font-size: 15px;
+  padding-left: 12px;
+  word-break: break-word;
+  text-align: right;
 }
 
 .color-grey {
 color: #b0b8c1;
+}
+
+/* 애니메이션 스타일 추가 */
+.fade-bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+
+.fade-up-enter-active {
+  animation: fade-up 0.5s;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 </style>
