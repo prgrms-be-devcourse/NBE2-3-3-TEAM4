@@ -25,4 +25,10 @@ interface OrderRepository : JpaRepository<Order, String> {
         createdAt: LocalDateTime,
         orderStatus: OrderStatus
     ): List<Order>
+
+    fun findAllByMemberAndOrderStatusNotIn(
+        member: Member,
+        statuses: List<OrderStatus>
+    ): Optional<List<Order>>
+
 }

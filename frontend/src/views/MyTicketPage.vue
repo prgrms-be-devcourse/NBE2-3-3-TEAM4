@@ -161,7 +161,7 @@ const cancelOrder = async (orderId) => {
 
                         <div class="info-item">
                             <div class="info-content">
-                                <label>{{ order.status === '주차중' ? '입차 시간' : '예상 시작 시간' }}</label>
+                                <label>{{ order.status === '주차중' ? '입차 시간' : '입차 예정 시간' }}</label>
                                 <div class="info-row">
                                     <p class="info-value price-horizontal">{{ order.startTime }}</p>
                                 </div>
@@ -169,7 +169,7 @@ const cancelOrder = async (orderId) => {
                         </div>
                         <div class="info-item">
                             <div class="info-content">
-                                <label>{{ order.status === '주차중' ? '예상 종료 시간' : '예상 종료 시간' }}</label>
+                                <label>{{ order.status === '주차중' ? '출차 예정 시간' : '출차 예정 시간' }}</label>
                                 <div class="info-row">
                                     <p class="info-value price-horizontal">{{ order.endTime }}</p>
                                 </div>
