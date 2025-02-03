@@ -2,13 +2,11 @@
 import NavBarNonMy from '../components/NavBar-nonMy.vue';
 import { useRouter } from 'vue-router';
 import axios from '../utils/axios-non';
-import { ref } from 'vue';
+import {ref} from 'vue';
 import InputBarNon from '../components/InputBar-non.vue';
 const router = useRouter();
 const email = ref('');
 const password = ref('');
-
-
 
 const toSignupPage = () => {
   router.push('/signup');

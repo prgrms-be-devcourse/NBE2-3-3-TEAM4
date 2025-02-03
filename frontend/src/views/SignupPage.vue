@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 import axios from '../utils/axios';
 import NavBarNonMy from '../components/NavBar-nonMy.vue';
@@ -36,7 +36,7 @@ const signup = async () => {
   }
 
   alert('회원가입 완료');
-  router.push('/');
+  await router.push('/');
 
 };
 

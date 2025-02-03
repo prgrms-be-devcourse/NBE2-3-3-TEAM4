@@ -32,7 +32,7 @@
       <p class="description">새로운 주차권을 구매하세요</p>
       <button class="action-button purchase" @click="toSearchPage">주차권 구매하기</button>
     </div>
-    <!-- 주차권 할인 섹션 -->
+    <!-- 주차권 확인 섹션 -->
     <div class="ticket-section discount">
       <div class="section-header">
         <img src="@/assets/icons/ticket-icon.png" alt="티켓 아이콘">
