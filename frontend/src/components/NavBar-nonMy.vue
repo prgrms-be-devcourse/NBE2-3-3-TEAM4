@@ -1,17 +1,10 @@
 <script setup>
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const toHomePage = () => {
-  router.push('/');
-};
 </script>
 
 <template>
 <nav class="navigation-bar">
     <div class="nav-content">
-      <div class="logo" @click="toHomePage">
+      <div class="logo">
         <span>뚝딱파킹 🚗</span>
       </div>
     </div>
@@ -39,7 +32,6 @@ const toHomePage = () => {
 .logo {
   font-size: 21px;
   font-weight: bold;
-  cursor: pointer;
 }
 
 .user-icon-btn {

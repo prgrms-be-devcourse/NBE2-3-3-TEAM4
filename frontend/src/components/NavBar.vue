@@ -7,16 +7,12 @@ const toMyPage = () => {
   router.push('/my-page');
 };
 
-const toHomePage = () => {
-  router.push('/');
-};
-
 </script>
 
 <template>
     <nav class="navigation-bar">
         <div class="nav-content">
-          <div class="logo" @click="toHomePage">
+          <div class="logo">
             <span>뚝딱파킹 🚗</span>
           </div>
           <button class="user-icon-btn" @click="toMyPage">
@@ -48,7 +44,6 @@ const toHomePage = () => {
 .logo {
   font-size: 21px;
   font-weight: bold;
-  cursor: pointer;
 }
 
 .user-icon-btn {

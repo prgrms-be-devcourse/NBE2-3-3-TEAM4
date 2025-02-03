@@ -26,7 +26,7 @@ interface OrderRepository : JpaRepository<Order, String> {
         orderStatus: OrderStatus
     ): List<Order>
 
-    fun findAllByMemberAndOrderStatusNotIn(
+    fun findAllByMemberAndOrderStatusNotInOrderByCreatedAtDesc(
         member: Member,
         statuses: List<OrderStatus>
     ): Optional<List<Order>>

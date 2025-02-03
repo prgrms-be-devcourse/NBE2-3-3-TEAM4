@@ -28,7 +28,7 @@ class TicketService(
     @Transactional(readOnly = true)
     fun getTicketHistory(email: String): List<TicketResponse.GetTicketHistory> {
         val member = memberRepository.findByEmail(email).orElseThrow{NotFoundException(ErrorCode.USER_NOT_FOUND)}
-        val tickets = orderRepository.findAllByMemberAndOrderStatusNotIn(member, listOf(WAITING, PARKING))
+        val tickets = orderRepository.findAllByMemberAndOrderStatusNotInOrderByCreatedAtDesc(member, listOf(WAITING, PARKING))
             .orElseThrow{NotFoundException(ErrorCode.ORDER_NOT_FOUND)}
             .map { TicketResponse.GetTicketHistory.from(it) }
 

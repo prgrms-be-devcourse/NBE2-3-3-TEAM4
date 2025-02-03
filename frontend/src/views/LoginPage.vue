@@ -46,7 +46,7 @@ const goBack = () => {
         <div class="input-group">
           <label for="email">이메일</label>
           <input
-            type="email"
+            type="text"
             id="email"
             v-model="email"
             required

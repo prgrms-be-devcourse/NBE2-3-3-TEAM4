@@ -40,6 +40,11 @@ const goBack = () => {
     router.push('/');
 }
 
+const goDetail = (order) => {
+  const encodedId = btoa(order.orderId.toString()); // Base64 인코딩
+  router.push(`/ticket-detail?orderid=${encodedId}`);
+};
+
 </script>
 
 <template>
@@ -64,25 +69,72 @@ const goBack = () => {
                 </button>
             </div>
         </div>
-      <div v-else>
-        <div v-for="order in orders" :key="order.id" class="ticket-container">
-          <div :class="ticket-section">
-            <h3>Ticket</h3>
+      <div v-else class="ticket-container">
+        <div v-for="order in orders" :key="order.id">
+          <div v-if="order.status === '환불'" class="ticket-section ticket-canceled">
+            <div class="section-header">
+              <div class="parking-name">
+                <h3>{{order.parkingName}}</h3>
+              </div>
+              <div class="car-number">
+                <img src="@/assets/icons/car-icon-pink.png" class="icon" alt="차 아이콘">
+                <p>{{order.carNum}}</p>
+              </div>
+            </div>
+            <div class="section-body">
+              <div class="order-time">
+                <img src="@/assets/icons/clock-pink.png" class="icon" alt="차 아이콘">
+                <h4>{{order.orderDay}}</h4>
+              </div>
+              <div class="order-price">
+                <img src="@/assets/icons/south-korean-won-pink.png" class="icon" alt="차 아이콘">
+                <h4>{{order.price.toLocaleString()}}</h4>
+              </div>
+            </div>
+            <div class="section-bottom" @click="goDetail(order)">
+              <h3>{{order.status}}</h3>
+              <h4>상세 정보 보기</h4>
+            </div>
+          </div>
+          <div v-else class="ticket-section">
+            <div class="section-header">
+              <div class="parking-name">
+                <h3>{{order.parkingName}}</h3>
+              </div>
+              <div class="car-number">
+                <img src="@/assets/icons/car-icon-blue.png" class="icon" alt="차 아이콘">
+                <p>{{order.carNum}}</p>
+              </div>
+            </div>
+            <div class="section-body">
+              <div class="order-time">
+                <img src="@/assets/icons/clock-blue.png" class="icon" alt="차 아이콘">
+                <h4>{{order.orderDay}}</h4>
+              </div>
+              <div class="order-price">
+                <img src="@/assets/icons/south-korean-won-blue.png" class="icon" alt="차 아이콘">
+                <h4>{{order.price.toLocaleString()}}</h4>
+              </div>
+            </div>
+            <div class="section-bottom" @click="goDetail(order)">
+              <h3>{{order.status}}</h3>
+              <h4>상세 정보 보기</h4>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
 </template>
 
 <style scoped>
+@import url('https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 .ticket-page-container {
     margin-top: 110px;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
     animation: fadeIn 0.5s ease-in-out;
-    height: calc(100vh - 177px);
     overflow: auto;
 }
 
@@ -93,13 +145,75 @@ const goBack = () => {
 }
 
 .ticket-section {
+  font-family: "Pretendard", sans-serif;
+  color: #2c2c2c;
   background: white;
-  padding: 30px;
+  padding: 20px;
   margin-bottom: 20px;
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
   border: 0;
+  p {
+    color: #7C9DFE;
+    font-family: "NanumSquare", sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-body {
+  font-size: 16px;
+  color: #707070;
+}
+
+.section-bottom {
+  display: flex;
+  color: #2c2c2c;
+  justify-content: space-between;
+  margin-top: 10px;
+  cursor: pointer;
+  h3 {
+    color: #707070;
+  }
+  h4 {
+    margin-top: 3px;
+  }
+}
+
+.order-time {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.order-price {
+  display: flex;
+  align-items: center;
+}
+
+.car-number {
+  display: flex;
+  align-items: center;
+}
+
+.ticket-canceled {
+  p {
+    color: #e86969;
+  }
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
 }
 
 @keyframes fadeIn {

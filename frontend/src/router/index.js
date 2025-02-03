@@ -72,20 +72,12 @@ const router = createRouter({
       name: 'cancel-order',
       component: () => import('../views/CancelOrderPage.vue'),
     }, {
-      path: '/payment/fail',
-      name: 'payment-fail',
-      component: () => import('../views/PaymentFailPage.vue'),
-    }, {
-      path: '/payment/cancel/:amount',
-      name: 'payment-cancel',
-      component: () => import('../views/PaymentCancelSuccessPage.vue'),
-    }, {
       path: '/ticket-history',
       name: 'ticket-history',
       component: () => import('../views/MyOrderHistoryPage.vue'),
     }, {
-      path: '/ticket-history/:orderId',
-      name: 'ticket-history-detail',
+      path: '/ticket-detail',
+      name: 'ticket-detail',
       component: () => import('../views/TicketHistoryDetailPage.vue'),
     }
   ],
