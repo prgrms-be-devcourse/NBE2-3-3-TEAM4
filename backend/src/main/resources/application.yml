@@ -39,3 +39,6 @@ jwt:
 kakao:
   api:
     key:${KAKAO_API_KEY}
+
+tosspayment:
+  secret-key: ${TOSS_PAYMENT_SECRET_KEY}
