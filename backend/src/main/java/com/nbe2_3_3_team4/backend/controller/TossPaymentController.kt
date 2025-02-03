@@ -7,13 +7,18 @@ import com.nbe2_3_3_team4.backend.global.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpSession
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.Duration
+
 
 @RestController
 @RequestMapping("/api/toss-payments")
@@ -38,8 +43,23 @@ class TossPaymentController(val tossPaymentService: TossPaymentService) {
         session: HttpSession,
         @RequestBody requestDto: TempAmountSession
     ): ResponseEntity<ApiResponse<Any>> {
-        tossPaymentService.createTempPaymentAmount(session, requestDto)
+        val sessionId: String = tossPaymentService.createTempPaymentAmount(
+            session,
+            requestDto
+        )
+
+        val cookie: ResponseCookie = ResponseCookie
+            .from("JSESSIONID", sessionId)
+            .domain("localhost")
+            .path("/")
+            .httpOnly(true)
+            .secure(false) // 로컬이므로 제외
+            .maxAge(Duration.ofDays(30))
+            .sameSite("Strict")
+            .build()
+
         return ResponseEntity.status(HttpStatus.CREATED)
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
             .body(ApiResponse.createSuccessWithNoData())
     }
 
@@ -58,9 +78,10 @@ class TossPaymentController(val tossPaymentService: TossPaymentService) {
     )
     @PostMapping("/amounts/verify")
     fun verifyPaymentAmount(
-        session: HttpSession,
+        httpServletRequest: HttpServletRequest,
         @RequestBody requestDto: TempAmountSession
     ): ResponseEntity<ApiResponse<Any>> {
+        val session: HttpSession = httpServletRequest.getSession(false)
         tossPaymentService.verifyPaymentAmountAndRemoveSession(session, requestDto)
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoData())
     }

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.io.IOException
@@ -24,16 +25,18 @@ import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.crypto.SecretKey
 
 @Service
 class TossPaymentService(
     val orderRepository: OrderRepository,
     val parkingStatusRepository: ParkingStatusRepository,
-
+    @param:Value("\${tosspayment.secret-key}")
+    private val secretKey: String,
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(TossPaymentService::class.java)
-    private val secretKey: String = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6"
+
     /**
      * 결제 전 금액 세션에 저장 메서드
      *
@@ -43,8 +46,9 @@ class TossPaymentService(
     fun createTempPaymentAmount(
         session: HttpSession,
         requestDto: TempAmountSession
-    ) {
+    ): String {
         session.setAttribute(requestDto.orderId, requestDto.amount)
+        return session.id
     }
 
     /**
@@ -194,7 +198,7 @@ class TossPaymentService(
         get() {
             // "Basic" + 토스페이먼츠 API 시크릿 키 + ":" -> base64인코딩
             val encoder = Base64.getEncoder()
-            val encodedBytes = encoder.encode(("$secretKey:").toByteArray(StandardCharsets.UTF_8))
+            val encodedBytes = encoder.encode(this.secretKey.toByteArray(StandardCharsets.UTF_8))
             return "Basic " + String(encodedBytes)
         }
 
